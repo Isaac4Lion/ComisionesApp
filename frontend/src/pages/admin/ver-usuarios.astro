@@ -1,0 +1,11 @@
+---
+import UsersTable from '../../components/UsersTable';
+import Layout from '../../layouts/Layout.astro';
+
+---
+
+<Layout title="Ver usuarios">
+	<main>
+        <UsersTable client:load />
+	</main>
+</Layout>
