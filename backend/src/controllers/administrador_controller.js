@@ -29,7 +29,7 @@ const registrarUsuario = async (req,res) => {
     await usuario.save()
     sendMailToUser(email,password,token)
 
-    res.status(200).json({res:'Registro exitoso, verifica tu email para confirmar tu cuenta'})
+    res.status(200).json({res:'Registro exitoso, se ha enviado un correo electrónico al usuario.'})
 }
 const registrarAdministrador = async (req,res) => {
     const {
@@ -54,7 +54,7 @@ const registrarAdministrador = async (req,res) => {
     await admin.save()
     sendMailToAdmin(email,token)
 
-    res.status(200).json({res:'Registro exitoso, verifica tu email para confirmar tu cuenta'})
+    res.status(200).json({res:'Registro exitoso, se ha enviado un correo electrónico al administrador.'})
 }
 
 const login = async(req,res) => {
@@ -94,9 +94,28 @@ const verificarToken = async (req, res)=>{
     res.status(200).json({msg:"Correo confirmado exitosamente"})
 }
 
+const listarUsuarios = async (req,res) => {
+    try {
+        const usuarios = await Usuarios.find()
+            .sort('nombre')
+            .select('-password -token -__v')
+            .lean();
+        
+        const admins = await Administradores.find()
+            .sort('nombre_usuario')
+            .select('-password -token -__v')
+            .lean();
+        
+        return res.status(200).json({usuarios:usuarios, admins:admins});
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+}
+
 export{
     registrarUsuario,
     registrarAdministrador,
     login,
-    verificarToken
+    verificarToken,
+    listarUsuarios
 }

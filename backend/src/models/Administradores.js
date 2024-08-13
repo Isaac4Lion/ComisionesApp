@@ -19,9 +19,8 @@ const administradorSchema = new Schema({
         trim:true,
     },
     confirmarEmail:{
-        type:String,
-        require:true,
-        trim:true,
+        type:Boolean,
+        default:false,
     },
     token:{
         type:String,
