@@ -1,5 +1,5 @@
-import Administradores from "../models/Administradores"
-import Usuarios from "../models/Usuarios"
+import Administradores from "../models/Administradores.js"
+import Usuarios from "../models/Usuarios.js"
 import generarJWT from '../helpers/JWT.js'
 import { sendMailToAdmin, sendMailToUser } from "../config/nodemailer.js"
 
@@ -7,15 +7,16 @@ const registrarUsuario = async (req,res) => {
     const {
         nombre,
         apellido,
-        email,
-        password
+        email
     } = req.body
 
     if (Object.values(req.body).includes("")) {return res.status(400).json({msg:"Lo sentimos, debes llenar todos los campos"})}
     
     const verificarEmail = await Usuarios.findOne({email})
     if(verificarEmail) {return res.status(400).json({msg:"Lo sentimos, el email ya existe"})}
-    
+
+    const password = Math.random().toString(36).slice(-8);
+
     const usuario = new Usuarios({
         nombre,
         apellido,
@@ -91,4 +92,11 @@ const verificarToken = async (req, res)=>{
     admin.token = null
     await admin.save()
     res.status(200).json({msg:"Correo confirmado exitosamente"})
+}
+
+export{
+    registrarUsuario,
+    registrarAdministrador,
+    login,
+    verificarToken
 }

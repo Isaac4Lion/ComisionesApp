@@ -1,4 +1,5 @@
-import Usuarios from "../models/Usuarios"
+import Usuarios from "../models/Usuarios.js"
+import generarJWT from '../helpers/JWT.js'
 
 const login = async (req,res)=>{
     const {
@@ -36,4 +37,9 @@ const verificarToken = async (req, res)=>{
     usuario.token = null
     await usuario.save()
     res.status(200).json({msg:"Correo confirmado exitosamente"})
+}
+
+export {
+    login,
+    verificarToken,
 }

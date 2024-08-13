@@ -10,6 +10,8 @@ import { dirname } from 'path';
 //IMPORTACIÓN DE RUTAS
 import routerComisiones from './routers/comisiones_routes.js';
 import routerLotes from './routers/lotes_routes.js'
+import routerAdmin from './routers/administrador_routes.js'
+import routerUsuarios from './routers/usuarios_routes.js'
 
 const app = express()
 //ES6 Modules que obtiene el nombre del directorio
@@ -29,6 +31,8 @@ app.use(fileUpload({createParentPath: true}))
 
 app.use('/api', routerComisiones)
 app.use('/api', routerLotes)
+app.use('/api', routerAdmin)
+app.use('/api', routerUsuarios)
 
 //Si no encuentra la página envia un 404
 app.use((req,res) => {res.status(404).send("Enpoint no encontrado - 404")})
