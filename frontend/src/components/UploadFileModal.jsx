@@ -4,21 +4,13 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import { useState } from "react";
-const UploadFileModal = ({ open, setOpen }) => {
-  const [file, setFile] = useState(null);
 
-  const [successMessage, setSuccessMessage] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
+const UploadFileModal = ({file, setFile, onAlert, successMessage, errorMessage, open, setOpen, setOpenAlert }) => {
+  
   const handleFileChange = (e) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
     }
-  };
-
-  const handleUpload = () => {
-    console.log(file);
   };
 
   return (
@@ -92,7 +84,8 @@ const UploadFileModal = ({ open, setOpen }) => {
                           <button
                             type="button"
                             className="w-48 justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:hover:cursor-not-allowed"
-                            onClick={handleUpload}
+                            onClick={()=>setOpenAlert(true)}
+                            disabled={onAlert}
                           >
                             Subir a BDD
                           </button>
@@ -102,6 +95,18 @@ const UploadFileModal = ({ open, setOpen }) => {
                   </div>
                 </div>
               </div>
+            </div>
+            
+            <div className="flex flex-col justify-center items-center gap-4 mb-5">
+              <button
+                type="button"
+                data-autofocus
+                onClick={() => {setOpen(false); setFile(null)}}
+                disabled={onAlert}
+                className="w-48 justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 "
+              >
+                Cancelar
+              </button>
             </div>
             {successMessage && (
               <div
@@ -127,13 +132,13 @@ const UploadFileModal = ({ open, setOpen }) => {
             )}
             {errorMessage && (
               <div
-                className="bg-teal-100 border-t-4 border-teal-500 rounded-b text-teal-900 px-4 py-3 shadow-md"
+                className="bg-red-100 border-t-4 border-red-500 rounded-b text-red-900 px-4 py-3 shadow-md"
                 role="alert"
               >
                 <div className="flex">
                   <div className="py-1">
                     <svg
-                      className="fill-current h-6 w-6 text-teal-500 mr-4"
+                      className="fill-current h-6 w-6 text-red-500 mr-4"
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
                     >
@@ -147,16 +152,6 @@ const UploadFileModal = ({ open, setOpen }) => {
                 </div>
               </div>
             )}
-            <div className="flex flex-col justify-center items-center gap-4 mb-5">
-              <button
-                type="button"
-                data-autofocus
-                onClick={() => {setOpen(false); setFile(null)}}
-                className="w-48 justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 "
-              >
-                Cancelar
-              </button>
-            </div>
           </DialogPanel>
         </div>
       </div>

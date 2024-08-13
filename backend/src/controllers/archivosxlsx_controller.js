@@ -19,7 +19,6 @@ const importarExcel = (req,res) =>{
             res.status(400).json({msg:"No se ha encontrado el archivo"})
         }
         f_subir = req.files.f_subir
-        
         const ext = mod_path.extname(f_subir.name)
         const ext_permitidas = ['.xlsx', '.csv']
 

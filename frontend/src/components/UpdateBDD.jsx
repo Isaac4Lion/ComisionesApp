@@ -1,8 +1,15 @@
+import AlertConfirm from "./AlertConfirm";
 import UploadFileModal from "./UploadFileModal";
 import { useState } from 'react'
 
 const UpdateBDD = () => {
   const [open, setOpen] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [file, setFile] = useState(null);
+  const [onAlert, setOnAlert] = useState(false)
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleDownload = async () => {
     try {
       const res = await fetch("http://localhost:3000/api/exportar-excel");
@@ -41,7 +48,26 @@ const UpdateBDD = () => {
 
   return (
     <>
-      <UploadFileModal setOpen={setOpen} open={open} />
+      <AlertConfirm 
+      file={file}
+      setFile={setFile}
+      setOpen={setOpen}
+      openAlert={openAlert}
+      setOpenAlert={setOpenAlert}
+      setSuccessMessage={setSuccessMessage}
+      setErrorMessage={setErrorMessage}
+      setOnAlert={setOnAlert}/>
+
+      <UploadFileModal 
+      setOpenAlert={setOpenAlert} 
+      setOpen={setOpen} 
+      open={open} 
+      file={file} 
+      setFile={setFile} 
+      onAlert={onAlert}
+      successMessage={successMessage}
+      errorMessage={errorMessage} 
+      />
       <a
         href="/admin/"
         className="inline-flex items-center border border-blue-900 px-3 py-1.5 m-8 rounded-md text-blue-900 hover:bg-blue-50"
