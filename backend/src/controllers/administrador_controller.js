@@ -2,6 +2,7 @@ import Administradores from "../models/Administradores.js"
 import Usuarios from "../models/Usuarios.js"
 import generarJWT from '../helpers/JWT.js'
 import { sendMailToAdmin, sendMailToUser } from "../config/nodemailer.js"
+import mongoose from "mongoose"
 
 const registrarUsuario = async (req,res) => {
     const {
@@ -40,6 +41,9 @@ const registrarAdministrador = async (req,res) => {
 
     if (Object.values(req.body).includes("")) {return res.status(400).json({msg:"Lo sentimos, debes llenar todos los campos"})}
     
+    const verificarNombreUsuario = await Administradores.findOne({nombre_usuario})
+    if(verificarNombreUsuario) {return res.status(400).json({msg:"Lo sentimos, el nombre de usuario ya existe"})}
+
     const verificarEmail = await Administradores.findOne({email})
     if(verificarEmail) {return res.status(400).json({msg:"Lo sentimos, el email ya existe"})}
     
@@ -97,12 +101,11 @@ const verificarToken = async (req, res)=>{
 const listarUsuarios = async (req,res) => {
     try {
         const usuarios = await Usuarios.find()
-            .sort('nombre')
+            .sort({createdAt:-1})
             .select('-password -token -__v')
             .lean();
-        
-        const admins = await Administradores.find()
-            .sort('nombre_usuario')
+            const admins = await Administradores.find()
+            .sort({createdAt:-1})
             .select('-password -token -__v')
             .lean();
         
@@ -112,10 +115,43 @@ const listarUsuarios = async (req,res) => {
     }
 }
 
+const eliminarUsuario = async (req,res) => {
+    const {id} = req.params
+    if (!mongoose.isValidObjectId(id)){ return res.status(400).json({msg: "ID inválido"})}
+    try {
+        await Usuarios.findByIdAndDelete(id)
+        return res.status(200).json({msg: "Se ha eliminado el usuario exitosamente."})
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({msg: error.message})
+    }
+}
+
+const eliminarAdmin = async (req,res) => {
+    const {id} = req.params
+    const administradores = await Administradores.find({confirmarEmail:true})
+    if (administradores.length === 1){ 
+        const id_admin = administradores[0].id
+        if(id_admin === id){
+            return res.status(400).json({msg: 'No puedes eliminar este administrador'})
+        }
+    }
+    if (!mongoose.isValidObjectId(id)){ return res.status(400).json({msg: "ID inválido"})}
+    try {
+        await Administradores.findByIdAndDelete(id)
+        return res.status(200).json({msg: "Se ha eliminado el administrador exitosamente."})
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({msg: error.message})
+    }
+}
+
 export{
     registrarUsuario,
     registrarAdministrador,
     login,
     verificarToken,
-    listarUsuarios
+    listarUsuarios,
+    eliminarUsuario,
+    eliminarAdmin
 }
