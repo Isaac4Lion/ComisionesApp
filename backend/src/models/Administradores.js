@@ -25,6 +25,10 @@ const administradorSchema = new Schema({
     token:{
         type:String,
         default:null,
+    },
+    createdAt: {
+        type:Date,
+        default: Date.now(),
     }
 })
 // Método para cifrar el password del veterinario

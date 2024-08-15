@@ -29,6 +29,10 @@ const usuariosSchema = new Schema({
     confirmarEmail:{
         type: Boolean,
         default: false,
+    },
+    createdAt:{
+        type:Date,
+        default: Date.now()
     }
 })
 // Método para cifrar el password del veterinario
