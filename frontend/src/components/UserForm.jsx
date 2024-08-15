@@ -52,7 +52,7 @@ const UserForm = () => {
                 },
                 body: JSON.stringify(formUser)
             }
-            const response = await fetch('http://localhost:3000/api/admin/registrar-usuario', options)
+            const response = await fetch('http://localhost:3000/api/admin/usuario', options)
             const data = await response.json()
             if (response.ok){
                 setSuccess(data.res)
@@ -84,7 +84,7 @@ const UserForm = () => {
                 },
                 body: JSON.stringify(formAdmin)
             }
-            const response = await fetch('http://localhost:3000/api/admin/registrar-admin', options)
+            const response = await fetch('http://localhost:3000/api/admin/admin', options)
             const data = await response.json()
             if (response.ok){
                 setSuccess(data.res)
