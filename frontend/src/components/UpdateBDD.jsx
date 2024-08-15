@@ -167,10 +167,16 @@ const UpdateBDD = () => {
                 <span className="text-black">constantemente.</span>
               </span>
             </li>
-            <li className="flex text-lg">
+            <li className="flex text-lg mb-2">
               <span className="ml-3">
                 Permite regresar a{" "}
                 <span className="text-black">estados anteriores.</span>
+              </span>
+            </li>
+            <li className="flex text-lg">
+              <span className="text-black ml-3">
+                Se recomienda{" "}
+                <span className="text-gray-500">resolver los lotes desistidos antes.</span>
               </span>
             </li>
           </ul>

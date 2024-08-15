@@ -32,6 +32,29 @@ const listarLotesQuery = async (req, res) => {
         return res.status(400).json({ error: error.message });
     }
 };
+const listarLotesDesistidos = async (req,res) =>{
+    const { nombre, vendedor, etapa, manzana, lote, condicion, estado } = req.query;
+    let query = {desistimiento:true}; //Inicializar query con el valor de desistimiento false
+    
+    if (nombre) query['nombre_cliente'] = new RegExp(nombre, 'i');
+    if (vendedor) query['vendedor'] = new RegExp(vendedor, 'i');
+    if (etapa) query['etapa'] = etapa;
+    if (manzana) query['manzana'] = new RegExp(manzana, 'i');
+    if (lote) query['lote'] = lote;
+    if (condicion) query['condicion'] = new RegExp(condicion, 'i');
+    if (estado) query['estado_comision'] = new RegExp(estado, 'i');
+    
+    try {
+        const comisionesBDD = await Comisiones.find(query)
+            .sort('etapa manzana lote')
+            .select('-fecha_reserva -area -descuento -valor_descuento -valor_reserva -tipo_financiamiento -porcentaje_comision -observacion -abonos_anteriores -desistimiento -__v')
+            .lean();
+        
+        return res.status(200).json(comisionesBDD);
+    } catch (error) {
+        return res.status(400).json({ error: error.message });
+    }
+}
 
 
 const registrarLote = async (req,res) =>{
@@ -133,5 +156,6 @@ export {
     listarLotesQuery,
     registrarLote,
     modificarLote,
-    eliminarLote
+    eliminarLote,
+    listarLotesDesistidos
 }

@@ -13,7 +13,8 @@ import {
     registrarLote,
     modificarLote,
     eliminarLote,
-    listarLotesQuery
+    listarLotesQuery,
+    listarLotesDesistidos
 } from '../controllers/lotes_controller.js'
 
 
@@ -24,6 +25,7 @@ router.get('/subir-bdd', subirBDD)
 
 //Rutas Lotes
 router.get('/lotes', listarLotesQuery)
+router.get('/lotes-desistidos', listarLotesDesistidos)
 
 router.post('/lotes/registrar', registrarLote)
 router.put('/lotes/:id', modificarLote)
