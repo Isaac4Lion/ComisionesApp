@@ -115,7 +115,7 @@ const registrarLote = async (req,res) =>{
             observacion,
             condicion
         }
-        nuevoLote.estado_comision = calcularEstado(nuevoLote)
+        nuevoLote.estado_comision = await calcularEstado(nuevoLote,false)
         await Comisiones.create(nuevoLote);
         return res.status(200).json({msg:"Lote creado correctamente"})
     }
@@ -135,7 +135,7 @@ const modificarLote = async (req,res) => {
             return res.status(404).json({ msg: `Lo sentimos, no existe el lote ${id}` });
         }
 
-        loteModificado.estado_comision = calcularEstado(loteModificado);
+        loteModificado.estado_comision = calcularEstado(loteModificado,false);
         await loteModificado.save();
 
         res.status(200).json({ msg: "Lote actualizado correctamente", loteModificado });

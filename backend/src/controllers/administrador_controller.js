@@ -63,27 +63,27 @@ const registrarAdministrador = async (req,res) => {
 
 const login = async(req,res) => {
     const {
-        nombre_usuario,
+        email,
         password
     } = req.body
 
     if (Object.values(req.body).includes("")){ return res.status(400).json({msg:"Lo sentimos, debes llenar todos los campos"})}
     
-    const admin = await Usuarios.findOne({nombre_usuario})
-    if(!admin) return res.status(400).json({msg:"Lo sentimos, el usuario no existe"})
+    const admin = await Administradores.findOne({email})
+    if(!admin) {return res.status(400).json({msg:"Lo sentimos, el correo electrónico no está registrado"})}
+    if(!admin?.confirmarEmail) {return res.status(400).json({msg:"Lo sentimos, debes confirmar tu correo"})}
     // Validar que la contraseña sea correcta
     const matchPassword = await admin.matchPassword(password)
     if(!matchPassword) return res.status(400).json({msg:"Lo sentimos, la contraseña es incorrecta"})
     // Validar si el correo esta confirmado
-    if(!admin?.confirmarEmail) return res.status(400).json({msg:"Lo sentimos, debes confirmar tu correo"})
     
     // Crear un token
     const token = generarJWT(admin._id,'admin')
-    const {nombre_usuario:nombre, email} = admin
+    const {nombre_usuario:nombre, email:correo} = admin
     // Responder con el token
     res.status(200).json({
         token,
-        data: {nombre, email},
+        data: {nombre, correo},
         msg:"Inicio de sesión exitoso"
     })
 }

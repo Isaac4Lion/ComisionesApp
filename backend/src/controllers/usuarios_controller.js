@@ -11,7 +11,7 @@ const login = async (req,res)=>{
     if (Object.values(req.body).includes("")) return res.status(400).json({msg:"Lo sentimos, debes llenar todos los campos"})
     // Validar que el email exista en la base de datos
     const usuario = await Usuarios.findOne({email})
-    if(!usuario) return res.status(400).json({msg:"Lo sentimos, el email no existe"})
+    if(!usuario) return res.status(400).json({msg:"Lo sentimos, el correo electrónico no está registrado"})
     // Validar que la contraseña sea correcta
     const matchPassword = await usuario.matchPassword(password)
     if(!matchPassword) return res.status(400).json({msg:"Lo sentimos, la contraseña es incorrecta"})
@@ -28,6 +28,8 @@ const login = async (req,res)=>{
         msg:"Inicio de sesión exitoso"
     })
 }
+
+
 
 const verificarToken = async (req, res)=>{
     const {token} = req.params

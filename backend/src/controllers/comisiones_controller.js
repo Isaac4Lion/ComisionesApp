@@ -45,7 +45,7 @@ const registrarComision = async (req, res) => {
         }
 
         loteRegistrado.saldo_por_pagar = (loteRegistrado.valor_comision - parseFloat(loteRegistrado.abono_comision)).toFixed(2);
-        loteRegistrado.estado_comision = calcularEstado(loteRegistrado);
+        loteRegistrado.estado_comision = await calcularEstado(loteRegistrado,false);
 
         await loteRegistrado.save();
         return res.status(200).json({ msg: "Se ha registrado la comisión correctamente" });
@@ -64,7 +64,7 @@ const eliminarUltimaComision = async (req,res) => {
         ultimoLoteRegistrado.fecha_ultimo_abono = ultimoLoteRegistrado.abonos_anteriores[ultimoLoteRegistrado.abonos_anteriores.length-1]
         ultimoLoteRegistrado.abonos_anteriores.pop()
         ultimoLoteRegistrado.saldo_por_pagar = ultima_comision.saldo_por_pagar
-        ultimoLoteRegistrado.estado_comision = calcularEstado(ultimoLoteRegistrado)
+        ultimoLoteRegistrado.estado_comision = await calcularEstado(ultimoLoteRegistrado, false)
         ultimoLoteRegistrado.save()
         ultima_comision.id = ""
         ultima_comision.abono = 0;
