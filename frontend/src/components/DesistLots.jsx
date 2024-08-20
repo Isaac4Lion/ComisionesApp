@@ -132,6 +132,7 @@ export default function DesistLots(){
       lotes={lotes} 
       setLotes={setLotes} 
       listarLotes={listarLotes}
+      type={'desistimiento'}
       />
       <div className="flex flex-col items-center overflow-x-auto max-h-[70vh]">
         <div className="inline-block w-[90vw] overflow-x-auto">        

@@ -115,6 +115,7 @@ const Table = () => {
       lotes={lotes} 
       setLotes={setLotes} 
       listarLotes={listarLotes}
+      type={''}
       />
       <RegisterLot
       openModalRegister={openModalRegister} 
