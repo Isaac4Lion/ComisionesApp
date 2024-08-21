@@ -65,7 +65,6 @@ const registrarLote = async (req,res) =>{
         nombre_cliente,
         fecha_reserva,
         vendedor,
-        area,
         valor_venta,
         descuento,
         valor_reserva,
@@ -82,7 +81,6 @@ const registrarLote = async (req,res) =>{
     if (!nombre_cliente){return res.status(400).json({msg:"Ingresa el nombre del cliente, por favor."})}
     if (!fecha_reserva){return res.status(400).json({msg:"Ingresa la fecha de reserva, por favor."})}
     if (!vendedor){return res.status(400).json({msg:"Ingresa el vendedor, por favor."})}
-    if (!area){return res.status(400).json({msg:"Ingresa el área del lote, por favor."})}
     if (!valor_venta){return res.status(400).json({msg:"Ingresa el valor de venta, por favor."})}
     if (!valor_reserva){return res.status(400).json({msg:"Ingresa el valor de reserva, por favor."})}
     if (!valor_total_recibido){return res.status(400).json({msg:"Ingresa el valor total recibido, por favor."})}
@@ -101,12 +99,10 @@ const registrarLote = async (req,res) =>{
             etapa,
             manzana,
             lote,
-            area,
             valor_venta,
             descuento,
             valor_descuento: Number(valor_venta*descuento).toFixed(2),
             valor_reserva,
-            valor_venta30: Number(valor_venta*0.30).toFixed(2),
             tipo_financiamiento,
             valor_total_recibido,
             porcentaje_comision: Number(porcentaje_comision/100).toFixed(3),

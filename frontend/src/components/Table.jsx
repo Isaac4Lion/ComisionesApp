@@ -18,6 +18,7 @@ const Table = () => {
     const [openModalRegister, setOpenModalRegister] = useState(false);
 
     const [detalleLote, setDetalleLote] = useState([]);
+    const [condiciones, setCondiciones] = useState([]);
     const [updateCommission, setUpdateCommission] = useState(false);
     
     const listarLotes = async () => {
@@ -33,6 +34,20 @@ const Table = () => {
       } finally {
           setLoading(false);
       }
+  };
+
+  const listarCondiciones = async () => {
+    try{
+      const response = await fetch("http://localhost:3000/api/condiciones")
+      const data = await response.json()
+      if (response.ok){
+        setCondiciones(data);
+      }else{
+        console.log(data)
+      }
+    }catch(error){
+      console.log(error);
+    }
   };
 
     const consultarDetalleLotes = async (id) => {
@@ -53,6 +68,7 @@ const Table = () => {
 
     useEffect(() => {
         listarLotes();
+        listarCondiciones()
     }, []);
 
     if (loading) {
@@ -121,6 +137,7 @@ const Table = () => {
       openModalRegister={openModalRegister} 
       setOpenModalRegister={setOpenModalRegister}
       listarLotes={listarLotes}
+      condiciones={condiciones}
       />
       <CommissionModal 
       open={open} 
