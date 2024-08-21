@@ -31,11 +31,6 @@ const comisionesSchema = new Schema({
         require:true,
         trim:true,
     },
-    area:{
-        type: Number,
-        require:true,
-        trim:true,
-    },
     valor_venta:{
         type: Number,
         require:true,
@@ -52,11 +47,6 @@ const comisionesSchema = new Schema({
         trim:true,
     },
     valor_reserva:{
-        type: Number,
-        require:true,
-        trim:true,
-    },
-    valor_venta30:{
         type: Number,
         require:true,
         trim:true,

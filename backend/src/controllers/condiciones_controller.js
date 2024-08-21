@@ -2,6 +2,17 @@ import mongoose from "mongoose"
 import Condiciones from "../models/Condiciones.js"
 import Comisiones from "../models/Comisiones.js"
 
+const listarCondiciones = async (req,res) => {
+    try {
+        const condicionesBDD = await Condiciones.find().lean().select('-__v')
+        if (condicionesBDD.length === 0){ return res.status(400).json({msg:"No existen condiciones registradas"})}
+        
+        return res.status(200).json(condicionesBDD)
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({msg:"Error: "+ error.message})
+    }
+}
 const detalleCondicion = async (req,res)=>{
     const {id} = req.params
     if (!mongoose.isValidObjectId(id)){return res.status(400).json({msg:"El ID proporcionado no es válido."})}
@@ -91,6 +102,7 @@ const modificarCondicion = async (req,res) => {
         
         if(condicion_dias){
             if (typeof condicion_dias !== 'number'){return res.status(400).json({msg:"El valor de los días debe ser un número."})}
+            if (condicion_dias<0){ return res.status(400).json({msg:"La condicion días no puede ser menor a 0 días"})}
             if(condicion_porcentaje){ return res.status(400).json({msg:"No puede existir la condicion de porcentaje si ya existe la condición de días."})}
             const condicion = {
                 nombre,
@@ -104,6 +116,8 @@ const modificarCondicion = async (req,res) => {
         }
         if(condicion_porcentaje){
             if (typeof condicion_porcentaje !== 'number'){return res.status(400).json({msg:"El porcentaje debe ser un número."})}
+            if (condicion_porcentaje<0){ return res.status(400).json({msg:"La condicion porcentaje no puede ser menor que el 0%"})}
+            if (condicion_porcentaje>100){ return res.status(400).json({msg:"La condicion porcentaje no puede ser mayor que el 100%"})}
             if(condicion_dias){ return res.status(400).json({msg:"No puede existir la condicion de días si ya existe la condición de porcentaje."})}
             const condicion = {
                 nombre,
@@ -140,6 +154,7 @@ const eliminarCondicion = async (req,res) => {
 }
 
 export {
+    listarCondiciones,
     detalleCondicion,
     crearCondicion,
     modificarCondicion,

@@ -145,7 +145,6 @@ export default function DesistLots(){
                 <th className="px-6 py-2 sticky top-0">M</th>
                 <th className="px-6 py-2 sticky top-0">L</th>
                 <th className="px-6 py-2 sticky top-0">VALOR VENTA</th>
-                <th className="px-6 py-2 sticky top-0">30% VALOR VENTA</th>
                 <th className="px-6 py-2 sticky top-0">VALOR TOTAL RECIBIDO</th>
                 <th className="px-6 py-2 sticky top-0">VALOR COMISIÓN</th>
                 <th className="px-6 py-2 sticky top-0">ABONO COMISIÓN</th>
@@ -164,7 +163,6 @@ export default function DesistLots(){
                   <td className="whitespace-nowrap px-6 py-4">{lote.manzana}</td>
                   <td className="whitespace-nowrap px-6 py-4">{lote.lote}</td>
                   <td className="whitespace-nowrap px-6 py-4">{lote.valor_venta}</td>
-                  <td className="whitespace-nowrap px-6 py-4">{lote.valor_venta30}</td>
                   <td className="whitespace-nowrap px-6 py-4">{lote.valor_total_recibido}</td>
                   <td className="whitespace-nowrap px-6 py-4">{lote.valor_comision}</td>
                   <td className="whitespace-nowrap px-6 py-4">{lote.abono_comision}</td>

@@ -47,98 +47,7 @@ const importarExcel = (req, res) => {
     res.status(400).json({ msg: error.message });
   }
 };
-// const subirBDD = async (req, res) => {
-//     if (f_subir) {
-//         let ruta_archivo = __dirname + "/../cargas/Comisiones.xlsx";
-//         const workBook = XLSX.readFile(ruta_archivo, { cellText: false, cellDates: true });
-//         const worksheet = workBook.Sheets["Comisiones"];
 
-//         let jsa = XLSX.utils.sheet_to_json(worksheet);
-
-//         let comisiones_formateadas = jsa.map(async comision => {
-//             let obj = {};
-
-//             // Formatear las fechas
-//             const formatDate = (date) => (typeof date === "object" ? date.toLocaleDateString() : date);
-
-//             comision[nombres_excel.fecha_reserva] = formatDate(comision[nombres_excel.fecha_reserva]);
-//             comision[nombres_excel.fecha_abono] = formatDate(comision[nombres_excel.fecha_abono]);
-
-//             // Formatear los numeros a dos decimales
-//             const formatNumber = (num) => (num ? Number(num.toFixed(2)) : num);
-
-//             comision[nombres_excel.valor_descuento] = formatNumber(comision[nombres_excel.valor_descuento]);
-//             comision[nombres_excel.valor_venta] = formatNumber(comision[nombres_excel.valor_venta]);
-//             comision[nombres_excel.valor_venta30] = formatNumber(comision[nombres_excel.valor_venta30]);
-//             comision[nombres_excel.valor_total_recibido] = formatNumber(comision[nombres_excel.valor_total_recibido]);
-//             comision[nombres_excel.valor_comision] = formatNumber(comision[nombres_excel.valor_comision]);
-//             comision[nombres_excel.abono_comision] = formatNumber(comision[nombres_excel.abono_comision]);
-//             comision[nombres_excel.saldo_por_pagar] = formatNumber(comision[nombres_excel.saldo_por_pagar]);
-
-//             // const formatArea = (num) => (isNaN(num) ? 0 : Number(num));
-//             // comision[nombres_excel.area] = formatArea(comision[nombres_excel.area])
-
-//             //Formatear cadenas de texto
-//             const formatString = (obs) => obs ? obs : ""
-//             comision[nombres_excel.observacion] = formatString(comision[nombres_excel.observacion])
-//             comision[nombres_excel.fecha_ultimo_abono] = formatString(comision[nombres_excel.fecha_ultimo_abono])
-
-//             // Cambiar las cabezeras por las claves de la base de datos
-//             Object.keys(nombres_excel).forEach(key => {
-//                 obj[key] = comision[nombres_excel[key]];
-//             });
-
-//             if (typeof comision[nombres_excel.fecha_abono] === "string") {
-//                 let fechas = comision[nombres_excel.fecha_abono].split("+");
-//                 obj["abonos_anteriores"] = fechas.slice(0, -1);
-//                 obj["fecha_ultimo_abono"] = fechas[fechas.length - 1];
-//                 fechas.slice(0, -1).forEach((fecha, i) => {
-//                     comision[`FECHA ABONO ${i + 1}`] = fecha;
-//                 });
-//             }
-
-//             // Estado de la comision
-//             const valor_total_recibido = comision[nombres_excel.valor_total_recibido];
-//             const valor_venta = comision[nombres_excel.valor_venta];
-//             const valor_venta30 = comision[nombres_excel.valor_venta30];
-//             const saldo_por_pagar = comision[nombres_excel.saldo_por_pagar];
-//             const valor_comision = comision[nombres_excel.valor_comision];
-
-//             if (comision[nombres_excel.condicion] === "A") {
-//                 if (valor_total_recibido === valor_venta) {
-//                     obj["estado_comision"] = saldo_por_pagar < 0.09 ? "COMISIONES PAGADAS" : "POR PAGAR";
-//                 } else if (valor_total_recibido >= valor_venta30) {
-//                     obj["estado_comision"] = saldo_por_pagar >= (valor_comision / 2) ? "POR PAGAR" : "ESPECIAL";
-//                 } else {
-//                     obj["estado_comision"] = "PENDIENTE";
-//                 }
-//             } else {
-//                 obj["estado_comision"] = "POR DEFINIR";
-//             }
-
-//             // Actualizar en la base de datos
-//             let comisionEncontrada = await Comisiones.find({ 'etapa': comision[nombres_excel.etapa], 'manzana': comision[nombres_excel.manzana], 'lote': comision[nombres_excel.lote] }, '_id').exec();
-//             if (comisionEncontrada.length > 0) {
-//                 await Comisiones.findByIdAndUpdate(comisionEncontrada[0]._id, obj);
-//                 return obj = {};
-//             } else {
-//                 return obj;
-//             }
-//         });
-//         try {
-//             f_subir = ""; // Resetear la bandera de archivo subido
-//             comisiones_formateadas = await Promise.all(comisiones_formateadas)
-//             comisiones_formateadas = comisiones_formateadas.filter(comision => comision.etapa ? comision : "")
-//             if (comisiones_formateadas.length>0){
-//                 await Comisiones.create(comisiones_formateadas);
-//             }
-//             return res.status(200).json({ msg: "Se ha subido el archivo correctamente" });
-//         } catch (error) {
-//             return res.status(400).json({ error: "Error al subir a la bdd: " + error.message });
-//         }
-//     }
-//     res.status(400).json({ msg: "No se encuentra el archivo, suba uno por favor" });
-// };
 const subirBDD = async (req, res) => {
   if (f_subir) {
     await Comisiones.collection.drop().catch((error) => {
@@ -177,9 +86,6 @@ const subirBDD = async (req, res) => {
         );
         comision[nombres_excel.valor_venta] = formatNumber(
           comision[nombres_excel.valor_venta]
-        );
-        comision[nombres_excel.valor_venta30] = formatNumber(
-          comision[nombres_excel.valor_venta30]
         );
         comision[nombres_excel.valor_total_recibido] = formatNumber(
           comision[nombres_excel.valor_total_recibido]
@@ -257,14 +163,12 @@ const exportarExcel = async (req, res) => {
       obj[nombres_excel.etapa] = comision["etapa"];
       obj[nombres_excel.manzana] = comision["manzana"];
       obj[nombres_excel.lote] = comision["lote"];
-      obj[nombres_excel.area] = comision["area"];
       obj[nombres_excel.valor_venta] = comision["valor_venta"];
       obj[nombres_excel.descuento] = comision["descuento"];
       obj[nombres_excel.valor_descuento] = comision["valor_descuento"];
       obj[nombres_excel.valor_reserva] = comision["valor_reserva"];
       obj[nombres_excel.tipo_financiamiento] = comision["tipo_financiamiento"];
-      obj[nombres_excel.valor_total_recibido] =
-        comision["valor_total_recibido"];
+      obj[nombres_excel.valor_total_recibido] = comision["valor_total_recibido"];
       obj[nombres_excel.porcentaje_comision] = comision["porcentaje_comision"];
       obj[nombres_excel.valor_comision] = comision["valor_comision"];
       obj[nombres_excel.abono_comision] = comision["abono_comision"];
