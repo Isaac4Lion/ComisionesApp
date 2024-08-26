@@ -27,7 +27,8 @@ const SearchBar = ({ lotes, setLotes, type }) => {
                 .filter(key => query[key])
                 .map(key => `${key.toLowerCase()}=${query[key]}`)
                 .join('&');
-            const response = await fetch(`http://localhost:3000/api/lotes${type === 'desistidos' ? '-desistidos':''}?${queryString}`);
+            const token = localStorage.getItem('token')
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/lotes${type === 'desistidos' ? '-desistidos':''}?${queryString}`, {headers:{Authorization: `Bearer ${token}`}});
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }

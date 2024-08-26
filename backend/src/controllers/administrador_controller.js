@@ -69,23 +69,43 @@ const login = async(req,res) => {
 
     if (Object.values(req.body).includes("")){ return res.status(400).json({msg:"Lo sentimos, debes llenar todos los campos"})}
     
-    const admin = await Administradores.findOne({email})
-    if(!admin) {return res.status(400).json({msg:"Lo sentimos, el correo electrónico no está registrado"})}
-    if(!admin?.confirmarEmail) {return res.status(400).json({msg:"Lo sentimos, debes confirmar tu correo"})}
-    // Validar que la contraseña sea correcta
-    const matchPassword = await admin.matchPassword(password)
-    if(!matchPassword) return res.status(400).json({msg:"Lo sentimos, la contraseña es incorrecta"})
-    // Validar si el correo esta confirmado
-    
-    // Crear un token
-    const token = generarJWT(admin._id,'admin')
-    const {nombre_usuario:nombre, email:correo} = admin
-    // Responder con el token
-    res.status(200).json({
-        token,
-        data: {nombre, correo},
-        msg:"Inicio de sesión exitoso"
-    })
+    const usuario = await Usuarios.findOne({email})
+    if (usuario){
+        // Validar que la contraseña sea correcta
+        const matchPassword = await usuario.matchPassword(password)
+        
+        if(!matchPassword) {
+            const admin = await Administradores.findOne({email})
+            if(!admin) {return res.status(400).json({msg:"Lo sentimos, el correo electrónico no está registrado"})}
+            if(!admin?.confirmarEmail) {return res.status(400).json({msg:"Lo sentimos, debes confirmar tu correo"})}
+            // Validar que la contraseña sea correcta
+            const matchPassword = await admin.matchPassword(password)
+            if(!matchPassword) return res.status(400).json({msg:"Lo sentimos, la contraseña es incorrecta"})
+            // Validar si el correo esta confirmado
+            
+            // Crear un token
+            const token = generarJWT(admin._id,'admin')
+            const {nombre_usuario:nombre, email:correo} = admin
+            // Responder con el token
+            return res.status(200).json({
+                token,
+                data: {nombre, correo},
+                msg:"Inicio de sesión exitoso"
+            })
+        }
+        // Validar si el correo esta confirmado
+        if(!usuario?.confirmarEmail) return res.status(400).json({msg:"Lo sentimos, debes confirmar tu correo"})
+        
+        // Crear un token
+        const token = generarJWT(usuario._id,'usuario')
+        const {nombre, apellido, email:correo} = usuario
+        // Responder con el token
+        return res.status(200).json({
+            token,
+            data: {nombre, apellido, correo},
+            msg:"Inicio de sesión exitoso"
+        })
+    } 
 }
 
 const verificarToken = async (req, res)=>{

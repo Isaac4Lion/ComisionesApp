@@ -1,6 +1,8 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { PrivateRouteAdmin } from "../routes/PrivateRouteAdmin";
 const UsersTable = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [admins, setAdmins] = useState([]);
@@ -11,11 +13,15 @@ const UsersTable = () => {
 
   const handleDelete = async (id, type) => {
     try {
+      const token = localStorage.getItem('token')
       const options = {
         method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       };
       const response = await fetch(
-        `http://localhost:3000/api/admin/${type}/${id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/admin/${type}/${id}`,
         options
       );
       const data = await response.json();
@@ -43,14 +49,17 @@ const UsersTable = () => {
   useEffect(() => {
     const listarUsuarios = async () => {
       try {
+        const token = localStorage.getItem('token')
         const response = await fetch(
-          "http://localhost:3000/api/admin/usuarios"
+          `${import.meta.env.VITE_BACKEND_URL}/admin/usuarios`,{
+          headers:{
+            Authorization: `Bearer ${token}`
+          }}
         );
         const data = await response.json();
         if (response.ok) {
           setUsuarios(data.usuarios);
           setAdmins(data.admins);
-        } else {
         }
       } catch (error) {
         console.log(error);
@@ -65,7 +74,7 @@ const UsersTable = () => {
     }
   },[openAlert])
   return (
-    <>
+    <PrivateRouteAdmin>
     <Dialog open={openAlert} onClose={setOpenAlert} className="relative z-10">
         <DialogBackdrop
           className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
@@ -161,8 +170,8 @@ const UsersTable = () => {
           </div>
         </div>
       )}
-      <a
-        href="/admin/"
+      <Link
+        to="/admin"
         className="inline-flex items-center border border-blue-900 px-3 py-1.5 mt-8 mx-8 rounded-md text-blue-900 hover:bg-blue-50"
       >
         <svg
@@ -180,7 +189,7 @@ const UsersTable = () => {
           ></path>
         </svg>
         <span className="ml-1 font-bold text-lg">Regresar</span>
-      </a>
+      </Link>
       <div>
         <div className="flex flex-col items-center overflow-x-auto md:max-h-[35vh] mb-8">
           <span className="font-bold text-sm mb-2">USUARIOS</span>
@@ -320,7 +329,7 @@ const UsersTable = () => {
           </div>
         </div>
       </div>
-    </>
+    </PrivateRouteAdmin>
   );
 };
 export default UsersTable;

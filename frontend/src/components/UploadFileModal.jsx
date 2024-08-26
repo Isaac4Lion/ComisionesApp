@@ -5,8 +5,16 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 
-const UploadFileModal = ({file, setFile, onAlert, successMessage, errorMessage, open, setOpen, setOpenAlert }) => {
-  
+const UploadFileModal = ({
+  file,
+  setFile,
+  onAlert,
+  successMessage,
+  errorMessage,
+  open,
+  setOpen,
+  setOpenAlert,
+}) => {
   const handleFileChange = (e) => {
     if (e.target.files) {
       setFile(e.target.files[0]);
@@ -14,7 +22,14 @@ const UploadFileModal = ({file, setFile, onAlert, successMessage, errorMessage, 
   };
 
   return (
-    <Dialog open={open} onClose={() => {setOpen(false); setFile(null)}} className="relative z-10">
+    <Dialog
+      open={open}
+      onClose={() => {
+        setOpen(false);
+        setFile(null);
+      }}
+      className="relative z-10"
+    >
       <DialogBackdrop className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
       <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
         <div className="flex min-h-full justify-center p-4 text-center sm:items-center sm:p-0">
@@ -33,7 +48,9 @@ const UploadFileModal = ({file, setFile, onAlert, successMessage, errorMessage, 
                       <div className="flex flex-col items-center justify-center w-full">
                         <label
                           htmlFor="file"
-                          className={`flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 ${file ? 'hidden' : ''}`}
+                          className={`flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 ${
+                            file ? "hidden" : ""
+                          }`}
                         >
                           <div className="flex flex-col items-center justify-center pt-5 pb-6">
                             <svg
@@ -71,11 +88,17 @@ const UploadFileModal = ({file, setFile, onAlert, successMessage, errorMessage, 
                         {file && (
                           <section className="my-4">
                             <span className="font-bold">
-                            Detalles del Archivo
+                              Detalles del Archivo
                             </span>
                             <ul>
-                              <li><span className="font-bold">Nombre:</span> {file.name}</li>
-                              <li><span className="font-bold">Tamaño:</span> {file.size} bytes</li>
+                              <li>
+                                <span className="font-bold">Nombre:</span>{" "}
+                                {file.name}
+                              </li>
+                              <li>
+                                <span className="font-bold">Tamaño:</span>{" "}
+                                {file.size} bytes
+                              </li>
                             </ul>
                           </section>
                         )}
@@ -84,7 +107,7 @@ const UploadFileModal = ({file, setFile, onAlert, successMessage, errorMessage, 
                           <button
                             type="button"
                             className="w-48 justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 disabled:hover:cursor-not-allowed"
-                            onClick={()=>setOpenAlert(true)}
+                            onClick={() => setOpenAlert(true)}
                             disabled={onAlert}
                           >
                             Subir a BDD
@@ -96,12 +119,15 @@ const UploadFileModal = ({file, setFile, onAlert, successMessage, errorMessage, 
                 </div>
               </div>
             </div>
-            
+
             <div className="flex flex-col justify-center items-center gap-4 mb-5">
               <button
                 type="button"
                 data-autofocus
-                onClick={() => {setOpen(false); setFile(null)}}
+                onClick={() => {
+                  setOpen(false);
+                  setFile(null);
+                }}
                 disabled={onAlert}
                 className="w-48 justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 "
               >

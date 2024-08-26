@@ -14,23 +14,26 @@ import {
     modificarLote,
     eliminarLote,
     listarLotesQuery,
-    listarLotesDesistidos
+    listarLotesDesistidos,
+    eliminarLotePemanentemente
 } from '../controllers/lotes_controller.js'
+import { verificarAutenticacion } from '../middlewares/auth.js'
 
 
 //Rutas XLSX
-router.post('/importar-excel', importarExcel)
-router.get('/exportar-excel', exportarExcel)
-router.get('/subir-bdd', subirBDD)
+router.post('/importar-excel', verificarAutenticacion, importarExcel)
+router.get('/exportar-excel', verificarAutenticacion, exportarExcel)
+router.get('/subir-bdd', verificarAutenticacion, subirBDD)
 
 //Rutas Lotes
-router.get('/lotes', listarLotesQuery)
-router.get('/lotes-desistidos', listarLotesDesistidos)
+router.get('/lotes', verificarAutenticacion, listarLotesQuery)
+router.get('/lotes-desistidos', verificarAutenticacion, listarLotesDesistidos)
 
-router.post('/lotes/registrar', registrarLote)
-router.put('/lotes/:id', modificarLote)
-router.delete('/lotes/:id', eliminarLote)
+router.post('/lotes/registrar', verificarAutenticacion, registrarLote)
+router.put('/lotes/:id', verificarAutenticacion, modificarLote)
+router.delete('/lotes/:id', verificarAutenticacion, eliminarLote)
+router.delete('/lotes-desistidos/:id', verificarAutenticacion, eliminarLotePemanentemente)
 
-router.get('/lotes/:id', detalleLote)
+router.get('/lotes/:id', verificarAutenticacion, detalleLote)
 
 export default router

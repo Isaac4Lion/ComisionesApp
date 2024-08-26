@@ -1,6 +1,8 @@
-import AlertConfirm from "./AlertConfirm";
-import UploadFileModal from "./UploadFileModal";
+import { Link } from "react-router-dom";
+import AlertConfirm from "../components/AlertConfirm";
+import UploadFileModal from "../components/UploadFileModal";
 import { useState } from 'react'
+import { PrivateRouteAdmin } from "../routes/PrivateRouteAdmin";
 
 const UpdateBDD = () => {
   const [open, setOpen] = useState(false);
@@ -12,42 +14,37 @@ const UpdateBDD = () => {
 
   const handleDownload = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/exportar-excel");
+      const token = localStorage.getItem('token')
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/exportar-excel`,{headers:{Authorization: `Bearer ${token}`}});
 
       if (res.status === 200) {
-        // Extract binary data from the response and convert it to an ArrayBuffer
         const binaryDataBuffer = await res.arrayBuffer();
 
-        // Create a Blob from the ArrayBuffer, specifying the file type (MIME type)
         const blob = new Blob([binaryDataBuffer], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // MIME type for Excel files
         });
 
-        // Create a download link for the Blob
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
 
-        // Set the download attribute and trigger the download
         a.download = `Comisiones_${new Date().toLocaleDateString()}.xlsx`;
         document.body.appendChild(a);
         a.click();
 
-        // Clean up the temporary URL
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
       } else {
-        // Handle the case where the response status is not 200
         alert("Algo salió mal!");
       }
     } catch (error) {
-      // Handle any other errors that may occur during processing
+      console.log(error)
       alert("Algo salió mal");
     }
   };
 
   return (
-    <>
+    <PrivateRouteAdmin>
       <AlertConfirm 
       file={file}
       setFile={setFile}
@@ -68,8 +65,8 @@ const UpdateBDD = () => {
       successMessage={successMessage}
       errorMessage={errorMessage} 
       />
-      <a
-        href="/admin/"
+      <Link
+        to="/admin"
         className="inline-flex items-center border border-blue-900 px-3 py-1.5 m-8 rounded-md text-blue-900 hover:bg-blue-50"
       >
         <svg
@@ -87,7 +84,7 @@ const UpdateBDD = () => {
           ></path>
         </svg>
         <span className="ml-1 font-bold text-lg">Regresar</span>
-      </a>
+      </Link>
       <div className="flex flex-col gap-12 mx-8 justify-between items-center lg:flex-row lg:items-center lg:mx-36">
         <div className="w-full flex-1 mt-8 p-8 order-2 bg-white shadow-xl rounded-3xl sm:w-96 lg:rounded-r-none">
           <div className="mb-7 pb-7 flex items-center border-b border-gray-300">
@@ -188,7 +185,7 @@ const UpdateBDD = () => {
           </button>
         </div>
       </div>
-    </>
+    </PrivateRouteAdmin>
   );
 };
 export default UpdateBDD;

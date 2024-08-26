@@ -23,7 +23,7 @@ const sendMailToAdmin = (userMail, token) => {
     html: `
     <h1>Verifica tu cuenta</h1>
     <hr>
-    <p>Hola, haz clic <a href="${process.env.URL_BACKEND}/admin/verificar-token/${encodeURIComponent(token)}">aquí</a> para confirmar tu cuenta.</p>
+    <p>Hola, haz clic <a href="${process.env.URL_FRONTEND}confirmar-email/${encodeURIComponent(token)}">aquí</a> para confirmar tu cuenta.</p>
     <hr>
     <footer>Comisiones APP</footer>
     `, // Cuerpo del correo
@@ -65,7 +65,7 @@ const sendMailToUser = async (userMail, password, token) => {
     html: `
     <h1>Comisiones APP</h1>
     <hr>
-    Click <a href=${process.env.URL_BACKEND}usuario/verificar-token/${token}>aqui</a> para confirmar tu cuenta.
+    <h2>Click <a href=${process.env.URL_FRONTEND}confirmar-email/${encodeURIComponent(token)}>aqui</a> para confirmar tu cuenta.</h2>
     <hr>
     <h2>Credenciales para iniciar sesión</h3>
     <h3>Correo Electrónico:<span> (tu correo electrónico)</span></h3>

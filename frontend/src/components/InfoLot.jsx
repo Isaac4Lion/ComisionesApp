@@ -40,11 +40,14 @@ export default function InfoLot({
     if (edit) {
       if (valorTotalRecibidoAnterior != valorTotalRecibido) {
         try {
+          const token = localStorage.getItem('token')
           const response = await fetch(
-            `http://localhost:3000/api/lotes/${detalleLote.id}`,
+            `${import.meta.env.VITE_BACKEND_URL}/lotes/${detalleLote.id}`,
             {
               method: "PUT",
-              headers: { "Content-Type": "application/json" },
+              headers: { "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+               },
               body: JSON.stringify({
                 valor_total_recibido: Number(valorTotalRecibido),
               }),

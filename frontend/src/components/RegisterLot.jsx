@@ -7,9 +7,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import {
-  InformationCircleIcon,
   PlusCircleIcon,
-  MinusCircleIcon,
 } from "@heroicons/react/24/outline";
 
 export default function RegisterLot({
@@ -46,13 +44,16 @@ export default function RegisterLot({
     e.preventDefault();
     form.fecha_reserva = dateFormatter(form.fecha_reserva);
     try {
+      const token = localStorage.getItem('token')
       const requestedOptions = {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+         },
         body: JSON.stringify(form),
       };
       const response = await fetch(
-        "http://localhost:3000/api/lotes/registrar",
+        `${import.meta.env.VITE_BACKEND_URL}/lotes/registrar`,
         requestedOptions
       );
       const data = await response.json();

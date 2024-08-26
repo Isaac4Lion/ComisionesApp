@@ -24,7 +24,7 @@ export default function CondicionesForm({
     condicion_dias: "",
   });
 
-  const [editMode, setEditMode] = useState(false)
+  const [editMode, setEditMode] = useState(false);
 
   const handleValue = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -48,10 +48,12 @@ export default function CondicionesForm({
       condicion_porcentaje: Number(form.condicion_porcentaje),
     };
     try {
-      const response = await fetch("http://localhost:3000/api/condicion", {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/condicion`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(formatedForm),
       });
@@ -85,7 +87,7 @@ export default function CondicionesForm({
     }
   };
 
-  const editarCondicion = async(id) => {
+  const editarCondicion = async (id) => {
     try {
       const formatedForm = {
         nombre: form.nombre,
@@ -93,50 +95,58 @@ export default function CondicionesForm({
         porcentaje_comision: Number(form.porcentaje_comision),
         condicion_dias: Number(form.condicion_dias),
         condicion_porcentaje: Number(form.condicion_porcentaje),
-      }
-      const options={
-        method: 'PUT',
-        headers:{
-          'Content-Type':'application/json',
+      };
+      const token = localStorage.getItem("token");
+      const options = {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(formatedForm)
-      }
-      const response = await fetch(`http://localhost:3000/api/condicion/${id}`,options)
-      const data = await response.json()
-      if (response.ok){
-        setOpen(false)
-        setSuccess(data.msg)
-        setTimeout(()=>{
-          setSuccess('')
-        },3000)
-      }else{
-        setErrorMessage(data.msg)
-        setTimeout(()=>{
-          setErrorMessage('')
-        },3000)
+        body: JSON.stringify(formatedForm),
+      };
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/condicion/${id}`,
+        options
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setOpen(false);
+        setSuccess(data.msg);
+        setTimeout(() => {
+          setSuccess("");
+        }, 3000);
+      } else {
+        setErrorMessage(data.msg);
+        setTimeout(() => {
+          setErrorMessage("");
+        }, 3000);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   const detalleCondicion = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/condicion/${id}`);
+      const token = localStorage.getItem('token')
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/condicion/${id}`,{headers:{
+        Authorization: `Bearer ${token}`,
+      }});
       const data = await response.json();
       if (response.ok) {
         setForm({
-            nombre: data?.nombre,
-            porcentaje_comision: data?.porcentaje_comision,
-            nro_pagos: data?.nro_pagos,
-            condicion_porcentaje: data?.condicion_porcentaje || '',
-            condicion_dias: data?.condicion_dias || ''
-        })
-        if (data?.condicion_porcentaje){
-          setOption('porcentaje')
-        } else if(data?.condicion_dias){
-          setOption('dias')
-          document.getElementById('selectOption').value = 'dias'
+          nombre: data?.nombre,
+          porcentaje_comision: data?.porcentaje_comision,
+          nro_pagos: data?.nro_pagos,
+          condicion_porcentaje: data?.condicion_porcentaje || "",
+          condicion_dias: data?.condicion_dias || "",
+        });
+        if (data?.condicion_porcentaje) {
+          setOption("porcentaje");
+        } else if (data?.condicion_dias) {
+          setOption("dias");
+          document.getElementById("selectOption").value = "dias";
         }
       }
     } catch (error) {
@@ -145,28 +155,28 @@ export default function CondicionesForm({
   };
 
   useEffect(() => {
-    if(actualId) {
+    if (actualId) {
       detalleCondicion(actualId);
-      setEditMode(true)
-    }else{
-      setEditMode(false)
+      setEditMode(true);
+    } else {
+      setEditMode(false);
       setForm({
         nombre: "",
         porcentaje_comision: "",
         nro_pagos: 2,
         condicion_porcentaje: "",
         condicion_dias: "",
-      })
-      setOption('porcentaje')
+      });
+      setOption("porcentaje");
     }
   }, [actualId]);
 
-  useEffect(()=>{
-    if(!open){
+  useEffect(() => {
+    if (!open) {
       setActualId(null);
-      setEditMode(false)
+      setEditMode(false);
     }
-  }, [open])
+  }, [open]);
 
   return (
     <>
@@ -245,7 +255,7 @@ export default function CondicionesForm({
                             Tipo de Condición
                           </label>
                           <select
-                          id="selectOption"
+                            id="selectOption"
                             onChange={handleSelect}
                             className="shadow-sm w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
                           >
@@ -298,15 +308,19 @@ export default function CondicionesForm({
                   <button
                     type="submit"
                     form="condicionForm"
-                    className={`inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto disabled:hover:cursor-not-allowed ${editMode && 'hidden'}`}
+                    className={`inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto disabled:hover:cursor-not-allowed ${
+                      editMode && "hidden"
+                    }`}
                   >
                     Registrar Condición
                   </button>
                   <button
-                    onClick={()=>editarCondicion(actualId)}
+                    onClick={() => editarCondicion(actualId)}
                     type="button"
                     form="condicionForm"
-                    className={`inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto disabled:hover:cursor-not-allowed ${!editMode && 'hidden'}`}
+                    className={`inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto disabled:hover:cursor-not-allowed ${
+                      !editMode && "hidden"
+                    }`}
                   >
                     Modificar Condición
                   </button>

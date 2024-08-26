@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import InfoLot from '../components/InfoLot';
-import SearchBar from './SearchBar';
-import Alert from './Alert';
+import SearchBar from '../components/SearchBar';
+import Alert from '../components/Alert';
+import { Link } from 'react-router-dom';
+import { PrivateRouteAdmin } from '../routes/PrivateRouteAdmin';
 
 export default function DesistLots(){
     const [lotes, setLotes] = useState([]);
@@ -12,14 +14,17 @@ export default function DesistLots(){
     const [open, setOpen] = useState(false);
     const [openAlert, setOpenAlert] = useState(false);
     const [openCommission, setOpenCommission] = useState(false);
-    const [openModalRegister, setOpenModalRegister] = useState(false);
 
     const [detalleLote, setDetalleLote] = useState([]);
-    const [updateCommission, setUpdateCommission] = useState(false);
     
     const listarLotes = async () => {
       try {
-          const response = await fetch('http://localhost:3000/api/lotes-desistidos');
+        const token = localStorage.getItem('token')
+          const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/lotes-desistidos`,{
+            headers:{
+              Authorization: `Bearer ${token}`
+            }
+          });
           if (!response.ok) {
              throw new Error('Network response was not ok');
           }
@@ -34,7 +39,12 @@ export default function DesistLots(){
 
     const consultarDetalleLotes = async (id) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/lotes/${id}`);
+          const token = localStorage.getItem('token')
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/lotes/${id}`,{
+              headers:{
+                Authorization: `Bearer ${token}`
+              }
+            });
             if (!response.ok) {
                throw new Error('Network response was not ok');
             }
@@ -66,7 +76,7 @@ export default function DesistLots(){
     }
 
     return (
-    <>
+    <PrivateRouteAdmin>
       <Alert 
         openAlert={openAlert}
         setOpenAlert={setOpenAlert}
@@ -76,6 +86,7 @@ export default function DesistLots(){
         setSuccess={setSuccess}
         detalleLote={detalleLote} 
         listarLotes={listarLotes}
+        type={'desistimiento'}
       />
       {error ? 
       <div className="absolute right-8 flex items-center p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50" role="alert">
@@ -99,8 +110,8 @@ export default function DesistLots(){
         </div>
       </div>
       : ''}
-      <a
-        href="/admin/"
+      <Link
+        to="/admin"
         className="inline-flex items-center border border-blue-900 px-3 py-1.5 mt-8 mx-8 rounded-md text-blue-900 hover:bg-blue-50"
       >
         <svg
@@ -118,7 +129,7 @@ export default function DesistLots(){
           ></path>
         </svg>
         <span className="ml-1 font-bold text-lg">Regresar</span>
-      </a>
+      </Link>
       <SearchBar lotes={lotes} setLotes={setLotes} type={'desistidos'}/>
       <InfoLot 
       open={open} 
@@ -176,6 +187,6 @@ export default function DesistLots(){
           </table>
         </div>
       </div>      
-    </>
+    </PrivateRouteAdmin>
   );
 };

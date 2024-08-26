@@ -12,7 +12,10 @@ const ButtonsTable = ({
   };
   const handleDownload = async () => {
     try {
-      const res = await fetch("http://localhost:3000/api/exportar-excel");
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/exportar-excel`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (res.status === 200) {
         // Extract binary data from the response and convert it to an ArrayBuffer
@@ -41,18 +44,22 @@ const ButtonsTable = ({
         alert("Algo salió mal!");
       }
     } catch (error) {
-      // Handle any other errors that may occur during processing
+      console.log(error);
       alert("Algo salió mal");
     }
   };
 
   const deleteLastCommission = async () => {
+    const token = localStorage.getItem("token");
     const requestedOptions = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     };
     const response = await fetch(
-      "http://localhost:3000/api/comisiones/eliminar-ultima-comision",
+      `${import.meta.env.VITE_BACKEND_URL}/comisiones/eliminar-ultima-comision`,
       requestedOptions
     );
     if (response.status === 200) {

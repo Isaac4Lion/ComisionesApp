@@ -12,13 +12,17 @@ const AlertConfirm = ({file, setFile, openAlert, setOpenAlert, setOpen, setSucce
         formData.append("f_subir", file);
     
         try {
-          const res = await fetch("http://localhost:3000/api/importar-excel", {
+          const token = localStorage.getItem('token')
+          const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/importar-excel`, {
             method: "POST",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
             body: formData,
           });
     
           if (res.ok) {
-            const response = await fetch("http://localhost:3000/api/subir-bdd")
+            const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/subir-bdd`,{headers:{Authorization: `Bearer ${token}`}})
             if (response.ok){
               const data = await response.json();
               setSuccessMessage(data.msg);
