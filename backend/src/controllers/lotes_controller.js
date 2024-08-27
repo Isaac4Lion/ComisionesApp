@@ -114,7 +114,7 @@ const registrarLote = async (req, res) => {
         return res.status(400).json({ msg: "El porcentaje de la comisión debe ser un número entre 0 y 100." });
     }
 
-    const loteBDD = await Comisiones.findOne({ 'etapa': etapa, 'manzana': manzana, 'lote': lote, 'desistimiento': false }).exec();
+    const loteBDD = await Comisiones.findOne({ 'etapa': etapa, 'manzana': manzanaUpper, 'lote': lote}).exec();
 
     if (!loteBDD) {
         const nuevoLote = {
