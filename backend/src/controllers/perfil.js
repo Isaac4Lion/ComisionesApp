@@ -1,5 +1,3 @@
-import Administradores from "../models/Administradores"
-
 const perfil = async (req, res) =>{
     if (req.admin){
         delete req.admin.token

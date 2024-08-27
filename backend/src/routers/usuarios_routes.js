@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { actualizarPassword, verificarToken } from "../controllers/usuarios_controller.js";
+import { verificarAutenticacion } from "../middlewares/auth.js";
 
 const router = Router()
 
