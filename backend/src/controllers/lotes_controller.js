@@ -10,9 +10,10 @@ const detalleLote = async (req,res) => {
 }
 
 const listarLotesQuery = async (req, res) => {
-    const { nombre, vendedor, etapa, manzana, lote, condicion, estado } = req.query;
+    const { id, nombre, vendedor, etapa, manzana, lote, condicion, estado } = req.query;
     let query = {desistimiento:false}; //Inicializar query con el valor de desistimiento false
     
+    if (id) query['_id'] = id;
     if (nombre) query['nombre_cliente'] = new RegExp(nombre, 'i');
     if (vendedor) query['vendedor'] = new RegExp(vendedor, 'i');
     if (etapa) query['etapa'] = etapa;
