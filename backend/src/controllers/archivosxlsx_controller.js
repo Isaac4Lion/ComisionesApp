@@ -151,7 +151,7 @@ const subirBDD = async (req, res) => {
 //Permite exportar la informacion de la BDD y descargarla localmente en archivo xlsx
 const exportarExcel = async (req, res) => {
   try {
-    const comisionesBDD = await Comisiones.find()
+    const comisionesBDD = await Comisiones.find({desistimiento:false})
       .sort("etapa manzana lote")
       .select("-_id -__v")
       .lean();
