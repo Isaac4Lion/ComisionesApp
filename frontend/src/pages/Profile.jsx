@@ -5,21 +5,22 @@ export default function Profile() {
   const { auth } = useContext(AuthContext);
   const [updatePasswordOpen, setupdatePasswordOpen] = useState(false);
   const [form, setForm] = useState({
-    actual_password: '',
-    nueva_password: '',
-    confirmar_nueva_password: '',
-  })
+    actual_password: "",
+    nueva_password: "",
+    confirmar_nueva_password: "",
+  });
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
   const handlePasswordUpdate = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       const token = localStorage.getItem("token");
       const url = `${import.meta.env.VITE_BACKEND_URL}${
         auth.rol == "admin" ? "admin" : "usuario"
       }/actualizar-password`;
       const requestedOptions = {
+        method:'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -29,6 +30,11 @@ export default function Profile() {
       if (response.status === 200) {
         setSuccess(data.msg);
         setTimeout(() => setSuccess(""), 2000);
+        setForm({
+          actual_password: "",
+          nueva_password: "",
+          confirmar_nueva_password: "",
+        });
       } else {
         setError(data.msg);
       }
@@ -37,10 +43,8 @@ export default function Profile() {
     }
   };
   const handleValue = (e) => {
-    setForm({...form,
-        [e.target.name]:e.target.value
-    })
-  }
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
   return (
     <>
       {error && (
