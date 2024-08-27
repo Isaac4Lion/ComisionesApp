@@ -34,6 +34,8 @@ const crearCondicion = async (req, res) => {
         condicion_dias
     } = req.body
 
+    const nombreUpper = nombre ? nombre.toUpperCase() : nombre
+
     if (!nombre){ return res.status(400).json({msg: "Completa el campo nombre"})}
     if (!porcentaje_comision){ return res.status(400).json({msg: "Completa el campo de porcentaje de comisión."})}
     if (typeof porcentaje_comision !== 'number'){ return res.status(400).json({msg:"Ingresa un valor correcto para el porcentaje de la comisión."})}
@@ -48,7 +50,7 @@ const crearCondicion = async (req, res) => {
             if (typeof condicion_porcentaje !== 'number'){return res.status(400).json({msg:"El porcentaje debe ser un número"})}
             if(condicion_dias){ return res.status(400).json({msg:"No puede existir la condicion de días si ya existe condición de porcentaje"})}
             const condicion = {
-                nombre,
+                nombre: nombreUpper,
                 porcentaje_comision,
                 nro_pagos,
                 condicion_porcentaje
@@ -60,7 +62,7 @@ const crearCondicion = async (req, res) => {
             if (typeof condicion_dias !== 'number'){return res.status(400).json({msg:"El valor de los días debe ser un número."})}
             if(condicion_porcentaje){ return res.status(400).json({msg:"No puede existir la condicion de porcentaje si ya existe la condición de días."})}
             const condicion = {
-                nombre,
+                nombre: nombreUpper,
                 porcentaje_comision,
                 nro_pagos,
                 condicion_dias
@@ -85,6 +87,7 @@ const modificarCondicion = async (req,res) => {
         condicion_porcentaje
     } = req.body
 
+    
     if (!mongoose.isValidObjectId(id)){return res.status(400).json({msg: "El ID parece incorrecto."})}
     if (!nombre){ return res.status(400).json({msg: "Completa el campo nombre"})}
     if (!porcentaje_comision){ return res.status(400).json({msg: "Completa el campo de porcentaje de comisión."})}
@@ -92,7 +95,8 @@ const modificarCondicion = async (req,res) => {
     if (porcentaje_comision > 5){ return res.status(400).json({msg: "El porcentaje de comisión no puede ser mayor al 5%."})}
     if (typeof nro_pagos !== 'number'){ return res.status(400).json({msg:"Ingresa un valor correcto para el número de pagos."})}
     if (nro_pagos <= 0){ return res.status(400).json({msg: "El número de pagos no puede ser menor o igual a 0."})}
-
+    
+    const nombreUpper = nombre ? nombre.toUpperCase() : nombre
     try {
         const condicionBDD = await Condiciones.findById(id)
         if (!condicionBDD){return res.status(400).json({msg:"No se encuentra registrada esa condición."})}
@@ -105,7 +109,7 @@ const modificarCondicion = async (req,res) => {
             if (condicion_dias<0){ return res.status(400).json({msg:"La condicion días no puede ser menor a 0 días"})}
             if(condicion_porcentaje){ return res.status(400).json({msg:"No puede existir la condicion de porcentaje si ya existe la condición de días."})}
             const condicion = {
-                nombre,
+                nombre: nombreUpper,
                 porcentaje_comision,
                 nro_pagos,
                 condicion_dias
@@ -120,7 +124,7 @@ const modificarCondicion = async (req,res) => {
             if (condicion_porcentaje>100){ return res.status(400).json({msg:"La condicion porcentaje no puede ser mayor que el 100%"})}
             if(condicion_dias){ return res.status(400).json({msg:"No puede existir la condicion de días si ya existe la condición de porcentaje."})}
             const condicion = {
-                nombre,
+                nombre: nombreUpper,
                 porcentaje_comision,
                 nro_pagos,
                 condicion_porcentaje

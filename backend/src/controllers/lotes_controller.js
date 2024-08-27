@@ -58,7 +58,7 @@ const listarLotesDesistidos = async (req,res) =>{
 }
 
 
-const registrarLote = async (req,res) =>{
+const registrarLote = async (req, res) => {
     const {
         etapa,
         manzana,
@@ -74,50 +74,75 @@ const registrarLote = async (req,res) =>{
         porcentaje_comision,
         observacion,
         condicion
-    } = req.body
+    } = req.body;
 
-    if (!etapa){return res.status(400).json({msg:"Ingresa una etapa, por favor."})}
-    if (!manzana){return res.status(400).json({msg:"Ingresa la manzana, por favor."})}
-    if (!lote){return res.status(400).json({msg:"Ingresa un lote, por favor."})}
-    if (!nombre_cliente){return res.status(400).json({msg:"Ingresa el nombre del cliente, por favor."})}
-    if (!fecha_reserva){return res.status(400).json({msg:"Ingresa la fecha de reserva, por favor."})}
-    if (!vendedor){return res.status(400).json({msg:"Ingresa el vendedor, por favor."})}
-    if (!valor_venta){return res.status(400).json({msg:"Ingresa el valor de venta, por favor."})}
-    if (!valor_reserva){return res.status(400).json({msg:"Ingresa el valor de reserva, por favor."})}
-    if (!valor_total_recibido){return res.status(400).json({msg:"Ingresa el valor total recibido, por favor."})}
-    if (!porcentaje_comision){return res.status(400).json({msg:"Ingresa el porcentaje de la comisión, por favor."})}
-    if (!condicion){return res.status(400).json({msg:"Ingresa el tipo de condición, por favor."})}
+    // Validaciones básicas
+    if (!etapa) return res.status(400).json({ msg: "Ingresa una etapa, por favor." });
+    if (!manzana) return res.status(400).json({ msg: "Ingresa la manzana, por favor." });
+    if (!lote) return res.status(400).json({ msg: "Ingresa un lote, por favor." });
+    if (!nombre_cliente) return res.status(400).json({ msg: "Ingresa el nombre del cliente, por favor." });
+    if (!fecha_reserva) return res.status(400).json({ msg: "Ingresa la fecha de reserva, por favor." });
+    if (!vendedor) return res.status(400).json({ msg: "Ingresa el vendedor, por favor." });
+    if (!valor_venta) return res.status(400).json({ msg: "Ingresa el valor de venta, por favor." });
+    if (!valor_reserva) return res.status(400).json({ msg: "Ingresa el valor de reserva, por favor." });
+    if (!valor_total_recibido) return res.status(400).json({ msg: "Ingresa el valor total recibido, por favor." });
+    if (!porcentaje_comision) return res.status(400).json({ msg: "Ingresa el porcentaje de la comisión, por favor." });
+    if (!condicion) return res.status(400).json({ msg: "Ingresa el tipo de condición, por favor." });
 
-    const loteBDD = await Comisiones.findOne({'etapa':etapa, 'manzana':manzana ,'lote':lote, 'desistimiento':false}).exec()
+    //Convertir strings a Mayusculas
+    const manzanaUpper = manzana ? manzana.toUpperCase() : manzana;
+    const nombreClienteUpper = nombre_cliente ? nombre_cliente.toUpperCase() : nombre_cliente;
+    const vendedorUpper = vendedor ? vendedor.toUpperCase() : vendedor;
+    const tipoFinanciamientoUpper = tipo_financiamiento ? tipo_financiamiento.toUpperCase() : tipo_financiamiento;
+    const condicionUpper = condicion ? condicion.toUpperCase() : condicion;
+    const observacionUpper = observacion ? observacion.toUpperCase() : observacion;
 
-    if(!loteBDD){
+    // Validaciones de tipos y valores
+    if (typeof valor_venta !== 'number' || valor_venta <= 0) {
+        return res.status(400).json({ msg: "El valor de venta debe ser un número positivo." });
+    }
+    if (typeof descuento !== 'number' || descuento < 0 || descuento > 1) {
+        return res.status(400).json({ msg: "El descuento debe ser un número entre 0 y 1." });
+    }
+    if (typeof valor_reserva !== 'number' || valor_reserva <= 0) {
+        return res.status(400).json({ msg: "El valor de reserva debe ser un número positivo." });
+    }
+    if (typeof valor_total_recibido !== 'number' || valor_total_recibido < 0) {
+        return res.status(400).json({ msg: "El valor total recibido debe ser un número no negativo." });
+    }
+    if (typeof porcentaje_comision !== 'number' || porcentaje_comision <= 0 || porcentaje_comision > 100) {
+        return res.status(400).json({ msg: "El porcentaje de la comisión debe ser un número entre 0 y 100." });
+    }
 
-        //Calcular el estado de la comision
+    const loteBDD = await Comisiones.findOne({ 'etapa': etapa, 'manzana': manzana, 'lote': lote, 'desistimiento': false }).exec();
+
+    if (!loteBDD) {
         const nuevoLote = {
-            nombre_cliente,
+            nombre_cliente: nombreClienteUpper,
             fecha_reserva,
-            vendedor,
+            vendedor: vendedorUpper,
             etapa,
-            manzana,
+            manzana: manzanaUpper,
             lote,
             valor_venta,
             descuento,
-            valor_descuento: Number(valor_venta*descuento).toFixed(2),
+            valor_descuento: Number(valor_venta * descuento).toFixed(2),
             valor_reserva,
-            tipo_financiamiento,
+            tipo_financiamiento: tipoFinanciamientoUpper,
             valor_total_recibido,
-            porcentaje_comision: Number(porcentaje_comision/100).toFixed(3),
-            valor_comision: Number(valor_venta * (porcentaje_comision/100)).toFixed(2),
-            saldo_por_pagar: Number(valor_venta * (porcentaje_comision/100)).toFixed(2),
-            observacion,
-            condicion
-        }
-        nuevoLote.estado_comision = await calcularEstado(nuevoLote,false)
+            porcentaje_comision: Number(porcentaje_comision / 100).toFixed(3),
+            valor_comision: Number(valor_venta * (porcentaje_comision / 100)).toFixed(2),
+            saldo_por_pagar: Number(valor_venta * (porcentaje_comision / 100)).toFixed(2),
+            observacion: observacionUpper,
+            condicion: condicionUpper
+        };
+        nuevoLote.estado_comision = await calcularEstado(nuevoLote, false);
         await Comisiones.create(nuevoLote);
-        return res.status(200).json({msg:"Lote creado correctamente"})
+        return res.status(200).json({ msg: "Lote creado correctamente" });
     }
-    return res.status(400).json({msg:"El lote ya se encuentra registrado"})
-}
+    return res.status(400).json({ msg: "El lote ya se encuentra registrado" });
+};
+
 
 const modificarLote = async (req,res) => {
     const {id} = req.params
