@@ -184,6 +184,16 @@ const eliminarAdmin = async (req,res) => {
     }
 }
 
+const actualizarPassword = async (req,res)=>{
+    const adminBDD = await Administradores.findById(req.admin._id)
+    if(!adminBDD) return res.status(404).json({msg:`Lo sentimos, no existe ese usuario`})
+    const verificarPassword = await adminBDD.matchPassword(req.body.actual_password)
+    if(!verificarPassword) return res.status(404).json({msg:"Lo sentimos, la contraseña es incorrecta."})
+    adminBDD.password = await adminBDD.encrypPassword(req.body.nueva_password)
+    await adminBDD.save()
+    res.status(200).json({msg:"Contraseña actualizada correctamente"})
+}
+
 export{
     registrarUsuario,
     registrarAdministrador,
@@ -191,5 +201,6 @@ export{
     verificarToken,
     listarUsuarios,
     eliminarUsuario,
-    eliminarAdmin
+    eliminarAdmin,
+    actualizarPassword
 }

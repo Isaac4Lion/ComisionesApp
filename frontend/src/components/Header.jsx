@@ -14,7 +14,9 @@ export default function Header(){
 						<img src={logoManta} className="mr-3 h-10 sm:h-16 w-auto" alt="Manta Hills S.C Logo" />
 					</a>
 					<div className="flex items-center lg:order-2">
-						<button onClick={()=>{localStorage.removeItem('token'); setAuth({})}} className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm mx-4 lg:mx-5 py-2 lg:my-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+						<button 
+                            onClick={()=>{localStorage.removeItem('token'); setAuth({})}} 
+                            className="text-white bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm mx-4 lg:mx-5 py-2 lg:my-2.5 mr-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
 							Cerrar Sesión
 						</button>
                         {auth.rol === "admin" &&
@@ -31,6 +33,19 @@ export default function Header(){
                                 </svg>
                             </Link>
                         }
+                        <Link to="/profile" className='mx-1'>
+                        <svg width="25" height="25" viewBox="0 0 45 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g clipPath="url(#clip0_129_422)">
+                            <path d="M22.4998 38.4C16.979 38.4 12.0986 35.5734 9.24984 31.3334C9.31609 26.9167 18.0832 24.4875 22.4998 24.4875C26.9165 24.4875 35.6836 26.9167 35.7498 31.3334C34.2902 33.5075 32.3181 35.2893 30.0075 36.5216C27.6968 37.754 25.1186 38.3991 22.4998 38.4ZM22.4998 7.04169C24.2569 7.04169 25.942 7.73968 27.1844 8.98211C28.4269 10.2245 29.1248 11.9096 29.1248 13.6667C29.1248 15.4237 28.4269 17.1088 27.1844 18.3513C25.942 19.5937 24.2569 20.2917 22.4998 20.2917C20.7428 20.2917 19.0577 19.5937 17.8153 18.3513C16.5728 17.1088 15.8748 15.4237 15.8748 13.6667C15.8748 11.9096 16.5728 10.2245 17.8153 8.98211C19.0577 7.73968 20.7428 7.04169 22.4998 7.04169ZM22.4998 0.416687C19.5998 0.416687 16.7282 0.987889 14.0489 2.09768C11.3696 3.20747 8.93519 4.83412 6.88456 6.88475C2.74313 11.0262 0.416504 16.6432 0.416504 22.5C0.416504 28.3569 2.74313 33.9739 6.88456 38.1153C8.93519 40.1659 11.3696 41.7926 14.0489 42.9024C16.7282 44.0122 19.5998 44.5834 22.4998 44.5834C28.3567 44.5834 33.9737 42.2567 38.1151 38.1153C42.2565 33.9739 44.5832 28.3569 44.5832 22.5C44.5832 10.2879 34.6457 0.416687 22.4998 0.416687Z" fill="white"/>
+                            </g>
+                            <defs>
+                            <clipPath id="clip0_129_422">
+                            <rect width="45" height="45" fill="white"/>
+                            </clipPath>
+                            </defs>
+                        </svg>
+                        </Link>
+
 					</div>
 				</div>
 			</nav>

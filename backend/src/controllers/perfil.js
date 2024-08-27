@@ -1,3 +1,5 @@
+import Administradores from "../models/Administradores"
+
 const perfil = async (req, res) =>{
     if (req.admin){
         delete req.admin.token
@@ -15,4 +17,5 @@ const perfil = async (req, res) =>{
         res.status(200).json(req.user)
     }
 }
+
 export default perfil

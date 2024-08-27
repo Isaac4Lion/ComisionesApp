@@ -12,6 +12,7 @@ import LoginForm from './pages/LoginForm'
 import { AuthProvider } from './context/AuthProvider'
 import NotFoundPage from './pages/404Page'
 import ConfirmEmail from './pages/ConfirmEmail'
+import Profile from './pages/Profile'
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
           <Route path='admin/condiciones' element={<Condiciones />}/>
           <Route path='admin/desistimientos' element={<DesistLots />} />
           <Route path='admin/actualizar-bdd' element={<UpdateBDD />} />
+          <Route path='profile' element={<Profile />} />
         </Route>
         <Route path='/login' element={<LoginForm />}/>
         <Route path='/confirmar-email/:token' element={<ConfirmEmail />}/>
