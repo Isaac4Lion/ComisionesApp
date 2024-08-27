@@ -59,16 +59,16 @@ export default function InfoLot({
             const errorData = await response.json();
             console.error('Error del servidor:', errorData);
             throw new Error(`Error: ${response.status} - ${response.statusText}`);
+          }else{
+            const data = await response.json();
+            setSuccessMessage(data.msg);
+            setDetalleLote(data.loteModificado);
+            listarLotes(detalleLote.id);
+            setTimeout(() => {
+              setSuccessMessage("");
+              setOpen(false);
+            }, 2000);
           }
-          
-          const data = await response.json();
-          setSuccessMessage(data.msg);
-          setDetalleLote(data.loteModificado);
-          listarLotes();
-          setTimeout(() => {
-            setSuccessMessage("");
-            setOpen(false);
-          }, 2000);
         } catch (error) {
           console.log(error)
           setErrorMessage(error.message);

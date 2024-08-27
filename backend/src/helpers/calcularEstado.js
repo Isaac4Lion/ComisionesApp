@@ -30,7 +30,7 @@ const calcularEstado = async (comision, excel) => {
     }
     if(comision[abono_comision] >= comisionTotal/2){
         if(condicionEncontrada[0].condicion_porcentaje){
-            return estado_comision = comision[valor_total_recibido] >= comision[valor_venta]*condicionEncontrada[0].condicion_porcentaje ? "POR PAGAR" : "PENDIENTE"
+            return estado_comision = comision[valor_total_recibido] >= comision[valor_venta]*(condicionEncontrada[0].condicion_porcentaje/100) ? "POR PAGAR" : "PENDIENTE"
         }else if(condicionEncontrada[0].condicion_dias){
             //
             return estado_comision = "POR HACER"

@@ -21,10 +21,11 @@ const Table = () => {
   const [condiciones, setCondiciones] = useState([]);
   const [updateCommission, setUpdateCommission] = useState(false);
 
-  const listarLotes = async () => {
+  const listarLotes = async (id) => {
     try {
+      const id_query = id ? `?id=${id}` : ''
       const token = localStorage.getItem("token");
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/lotes`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/lotes${id_query}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -43,6 +44,7 @@ const Table = () => {
 
   const listarCondiciones = async () => {
     try {
+      
       const token = localStorage.getItem("token");
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/condiciones`, {
         headers: {
@@ -214,7 +216,7 @@ const Table = () => {
             <tbody className="divide-y text-center">
               {lotes.map((lote) => (
                 <tr
-                  className="border-b border-neutral-20 hover:bg-gray-300 hover:cursor-pointer"
+                  className={`border-b border-neutral-20 hover:bg-gray-300 hover:cursor-pointer lote`}
                   key={lote._id}
                   id={lote._id}
                   onClick={() => handleClick(lote._id)}
