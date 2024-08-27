@@ -42,6 +42,7 @@ export default function RegisterLot({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(form)
     form.fecha_reserva = dateFormatter(form.fecha_reserva);
     try {
       const token = localStorage.getItem('token')
