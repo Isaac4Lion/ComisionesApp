@@ -185,10 +185,12 @@ const eliminarAdmin = async (req,res) => {
 }
 
 const actualizarPassword = async (req,res)=>{
+    if(Object.values(req.body).includes("")){return res.status(400).json({msg:"Completa todos los campos, por favor."})}
     const adminBDD = await Administradores.findById(req.admin._id)
-    if(!adminBDD) return res.status(404).json({msg:`Lo sentimos, no existe ese usuario`})
+    if(!adminBDD) {return res.status(404).json({msg:`Lo sentimos, no existe ese usuario`})}
     const verificarPassword = await adminBDD.matchPassword(req.body.actual_password)
-    if(!verificarPassword) return res.status(404).json({msg:"Lo sentimos, la contraseña es incorrecta."})
+    if(!verificarPassword) {return res.status(404).json({msg:"Lo sentimos, la contraseña es incorrecta."})}
+    if (req.body.nueva_password !== req.body.confirmar_nueva_password){return res.status(400).json({msg:"Las contraseñas no coinciden"})}
     adminBDD.password = await adminBDD.encrypPassword(req.body.nueva_password)
     await adminBDD.save()
     res.status(200).json({msg:"Contraseña actualizada correctamente"})

@@ -4,6 +4,11 @@ import AuthContext from "../context/AuthProvider";
 export default function Profile() {
   const { auth } = useContext(AuthContext);
   const [updatePasswordOpen, setupdatePasswordOpen] = useState(false);
+  const [form, setForm] = useState({
+    actual_password: '',
+    nueva_password: '',
+    confirmar_nueva_password: '',
+  })
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
@@ -31,6 +36,11 @@ export default function Profile() {
       console.log(error);
     }
   };
+  const handleValue = (e) => {
+    setForm({...form,
+        [e.target.name]:e.target.value
+    })
+  }
   return (
     <>
       {error && (
@@ -110,6 +120,8 @@ export default function Profile() {
           <input
             className="p-2"
             type="password"
+            name="actual_password"
+            onChange={handleValue}
             placeholder="Ingresa tu contraseña actual"
           />
           <label className="font-bold" htmlFor="nueva_password">
@@ -118,7 +130,19 @@ export default function Profile() {
           <input
             className="p-2"
             type="password"
+            name="nueva_password"
+            onChange={handleValue}
             placeholder="Ingresa tu nueva contraseña"
+          />
+          <label className="font-bold" htmlFor="nueva_password">
+            Confirmar Nueva Contraseña
+          </label>
+          <input
+            className="p-2"
+            type="password"
+            name="confirmar_nueva_password"
+            onChange={handleValue}
+            placeholder="Ingresa tu nueva contraseña para confirmar"
           />
           <button
             type="submit"
