@@ -81,7 +81,7 @@ const registrarLote = async (req, res) => {
     if (!manzana) return res.status(400).json({ msg: "Ingresa la manzana, por favor." });
     if (!lote) return res.status(400).json({ msg: "Ingresa un lote, por favor." });
     if (!nombre_cliente) return res.status(400).json({ msg: "Ingresa el nombre del cliente, por favor." });
-    if (!fecha_reserva) return res.status(400).json({ msg: "Ingresa la fecha de reserva, por favor." });
+    if (isNaN(new Date(fecha_reserva).getTime())) return res.status(400).json({ msg: "Ingresa la fecha de reserva, por favor." });
     if (!vendedor) return res.status(400).json({ msg: "Ingresa el vendedor, por favor." });
     if (!valor_venta) return res.status(400).json({ msg: "Ingresa el valor de venta, por favor." });
     if (!valor_reserva) return res.status(400).json({ msg: "Ingresa el valor de reserva, por favor." });
