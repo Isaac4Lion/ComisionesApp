@@ -98,19 +98,19 @@ const registrarLote = async (req, res) => {
     const observacionUpper = observacion ? observacion.toUpperCase() : observacion;
 
     // Validaciones de tipos y valores
-    if (typeof valor_venta !== 'number' || valor_venta <= 0) {
+    if (Number(valor_venta) <= 0) {
         return res.status(400).json({ msg: "El valor de venta debe ser un número positivo." });
     }
-    if (typeof descuento !== 'number' || descuento < 0 || descuento > 1) {
-        return res.status(400).json({ msg: "El descuento debe ser un número entre 0 y 1." });
+    if (Number(descuento) < 0 || Number(descuento) > 100) {
+        return res.status(400).json({ msg: "El descuento debe ser un número entre 0 y 100." });
     }
-    if (typeof valor_reserva !== 'number' || valor_reserva <= 0) {
+    if (Number(valor_reserva) <= 0) {
         return res.status(400).json({ msg: "El valor de reserva debe ser un número positivo." });
     }
-    if (typeof valor_total_recibido !== 'number' || valor_total_recibido < 0) {
+    if (Number(valor_total_recibido) < 0) {
         return res.status(400).json({ msg: "El valor total recibido debe ser un número no negativo." });
     }
-    if (typeof porcentaje_comision !== 'number' || porcentaje_comision <= 0 || porcentaje_comision > 100) {
+    if (Number(porcentaje_comision) <= 0 || Number(porcentaje_comision) > 100) {
         return res.status(400).json({ msg: "El porcentaje de la comisión debe ser un número entre 0 y 100." });
     }
 
