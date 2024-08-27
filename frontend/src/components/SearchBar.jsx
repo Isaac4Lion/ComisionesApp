@@ -116,7 +116,7 @@ const SearchBar = ({ lotes, setLotes, type }) => {
                     <input 
                     name={searchOption} 
                     type="text" 
-                    placeholder={`Busca por ${searchOption.toLowerCase()}`} 
+                    placeholder={`Busca por ${searchOption.toLowerCase()} / 'Enter' para refrescar`} 
                     onChange={handleValue}
                     value={form[searchOption]}
                         className={`w-full md:w-80 px-3 h-10 rounded-l border-2 border-sky-500 focus:outline-none ${searchOption === 'Lote' ? 'hidden' : ''}`}

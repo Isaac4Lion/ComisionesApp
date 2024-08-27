@@ -57,7 +57,7 @@ const Alert = ({
         },
       };
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/lotes-desistidos/${detalleLote.id}`,
+        `${import.meta.env.VITE_BACKEND_URL}lotes-desistidos/${detalleLote.id}`,
         requestedOptions
       );
       const data = await response.json();

@@ -15,7 +15,8 @@ import {
     eliminarLote,
     listarLotesQuery,
     listarLotesDesistidos,
-    eliminarLotePemanentemente
+    eliminarLotePemanentemente,
+    resolverLoteDesistido
 } from '../controllers/lotes_controller.js'
 import { verificarAutenticacion } from '../middlewares/auth.js'
 
@@ -31,6 +32,7 @@ router.get('/lotes-desistidos', verificarAutenticacion, listarLotesDesistidos)
 
 router.post('/lotes/registrar', verificarAutenticacion, registrarLote)
 router.put('/lotes/:id', verificarAutenticacion, modificarLote)
+router.get('/lotes-desistidos/:id', verificarAutenticacion, resolverLoteDesistido)
 router.delete('/lotes/:id', verificarAutenticacion, eliminarLote)
 router.delete('/lotes-desistidos/:id', verificarAutenticacion, eliminarLotePemanentemente)
 

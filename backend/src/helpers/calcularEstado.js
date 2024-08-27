@@ -1,5 +1,6 @@
 import Condiciones from "../models/Condiciones.js"
 import nombres_excel from "./nombres_excel.js"
+import sumarDias from "./sumarDias.js";
 
 const calcularEstado = async (comision, excel) => {
     const condiciones = await Condiciones.find()
@@ -28,12 +29,17 @@ const calcularEstado = async (comision, excel) => {
     if(Number(comision[abono_comision]).toFixed(1) == Number(comisionTotal).toFixed(1)){
         return estado_comision = "PAGADO"
     }
-    if(comision[abono_comision] >= comisionTotal/2){
+    if(comision[abono_comision] >= (comisionTotal/2)-0.02){ //Para decimales
         if(condicionEncontrada[0].condicion_porcentaje){
             return estado_comision = comision[valor_total_recibido] >= comision[valor_venta]*(condicionEncontrada[0].condicion_porcentaje/100) ? "POR PAGAR" : "PENDIENTE"
         }else if(condicionEncontrada[0].condicion_dias){
-            //
-            return estado_comision = "POR HACER"
+            const nuevaFecha = sumarDias(comision[fecha_reserva], condicionEncontrada[0].condicion_dias);
+            const [dia, mes, anio] = nuevaFecha.split('/').map(Number);
+            const fecha = new Date(anio, mes - 1, dia);
+            const hoy = new Date();
+            hoy.setHours(0, 0, 0, 0); // Establecer la hora de hoy a las 00:00:00 para comparar solo la fecha
+
+            return estado_comision = fecha.getTime() > hoy.getTime() ? 'PENDIENTE' : 'POR PAGAR'
         }else{
             return estado_comision = "SIN CONDICION"
         }

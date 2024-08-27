@@ -56,7 +56,7 @@ const CommissionModal = ({
       if (response.ok) {
         setSuccessMessage("Comisión registrada con éxito");
         setUpdateCommission(true);
-        listarLotes();
+        listarLotes(detalleLote.id);
         setTimeout(() => {
           setSuccessMessage("");
           setOpenCommission(false);

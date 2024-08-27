@@ -153,10 +153,21 @@ const eliminarLotePemanentemente = async (req,res) => {
     if( !mongoose.Types.ObjectId.isValid(id) ) return res.status(404).json({msg:`Lo sentimos, no existe el lote ${id}`})
 
     const lote = await Comisiones.findById(id,{desistimiento:true}).lean()
-    console.log(lote)
     if (lote){
         await Comisiones.findByIdAndDelete(id)
         return res.status(200).json({msg:"Lote eliminado permanentemente"})
+    }else{
+        return res.status(400).json({msg:"El lote no se encuentra desistido"})
+    }
+}
+
+const resolverLoteDesistido = async (req,res) => {
+    const {id} = req.params
+    if( !mongoose.Types.ObjectId.isValid(id) ) return res.status(404).json({msg:`Lo sentimos, no existe el lote ${id}`})
+    const lote = await Comisiones.findById(id,{desistimiento:true}).lean()
+    if (lote){
+        await Comisiones.findByIdAndUpdate(id,{desistimiento:false})
+        return res.status(200).json({msg:"Lote resuelto correctamente"})
     }else{
         return res.status(400).json({msg:"El lote no se encuentra desistido"})
     }
@@ -168,5 +179,6 @@ export {
     modificarLote,
     eliminarLote,
     eliminarLotePemanentemente,
-    listarLotesDesistidos
+    listarLotesDesistidos,
+    resolverLoteDesistido
 }

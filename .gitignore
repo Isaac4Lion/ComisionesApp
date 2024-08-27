@@ -37,5 +37,3 @@ packages/**/e2e/**/fixtures/**/.astro/
 packages/**/e2e/**/fixtures/**/env.d.ts
 examples/**/.astro/
 examples/**/env.d.ts
-
-src/cargas/

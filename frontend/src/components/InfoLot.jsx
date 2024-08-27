@@ -40,7 +40,6 @@ export default function InfoLot({
     if (edit) {
       if (valorTotalRecibidoAnterior != valorTotalRecibido) {
         try {
-          console.log(detalleLote)
           const token = localStorage.getItem('token')
           const response = await fetch(
             `${import.meta.env.VITE_BACKEND_URL}lotes/${detalleLote.id}`,
@@ -82,6 +81,33 @@ export default function InfoLot({
       setEdit(true);
     }
   };
+
+  const resolverLoteDesistido = async () =>{
+    try {
+      const token = localStorage.getItem("token");
+      const requestedOptions = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}lotes-desistidos/${detalleLote.id}`,
+        requestedOptions
+      );
+      const data = await response.json();
+      if (response.status === 200) {
+        listarLotes();
+        setOpen(false);
+        setSuccessMessage(data.msg);
+        setTimeout(() => setSuccessMessage(""), 2000);
+      } else {
+        console.log(data)
+        setErrorMessage(data.msg)
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     if (!open) {
@@ -187,6 +213,7 @@ export default function InfoLot({
                   {type === "desistimiento" ? (
                     <>
                       <button
+                        onClick={()=>resolverLoteDesistido()}
                         type="button"
                         className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto disabled:hover:cursor-not-allowed"
                       >
