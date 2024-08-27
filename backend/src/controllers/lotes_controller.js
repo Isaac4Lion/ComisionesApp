@@ -131,7 +131,7 @@ const modificarLote = async (req,res) => {
             return res.status(404).json({ msg: `Lo sentimos, no existe el lote ${id}` });
         }
 
-        loteModificado.estado_comision = calcularEstado(loteModificado,false);
+        loteModificado.estado_comision = await calcularEstado(loteModificado,false);
         await loteModificado.save();
 
         res.status(200).json({ msg: "Lote actualizado correctamente", loteModificado });

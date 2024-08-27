@@ -19,7 +19,7 @@ export default function InfoLot({
   listarLotes,
   type,
 }) {
-  let valorTotalRecibidoAnterior = detalleLote.valor_total_recibido;
+  let valorTotalRecibidoAnterior = detalleLote.valor_total_recibido ;
   const [valorTotalRecibido, setValorTotalRecibido] = useState(
     valorTotalRecibidoAnterior
   );
@@ -29,7 +29,7 @@ export default function InfoLot({
 
   useEffect(() => {
     setValorTotalRecibido(valorTotalRecibidoAnterior);
-  }, [open]);
+  }, [open, valorTotalRecibidoAnterior]);  
 
   const handleValorTotalRecibido = (e) => {
     setValorTotalRecibido(e.target.value);
@@ -40,9 +40,10 @@ export default function InfoLot({
     if (edit) {
       if (valorTotalRecibidoAnterior != valorTotalRecibido) {
         try {
+          console.log(detalleLote)
           const token = localStorage.getItem('token')
           const response = await fetch(
-            `${import.meta.env.VITE_BACKEND_URL}/lotes/${detalleLote.id}`,
+            `${import.meta.env.VITE_BACKEND_URL}lotes/${detalleLote.id}`,
             {
               method: "PUT",
               headers: { "Content-Type": "application/json",
@@ -53,6 +54,13 @@ export default function InfoLot({
               }),
             }
           );
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Error del servidor:', errorData);
+            throw new Error(`Error: ${response.status} - ${response.statusText}`);
+          }
+          
           const data = await response.json();
           setSuccessMessage(data.msg);
           setDetalleLote(data.loteModificado);
@@ -62,6 +70,7 @@ export default function InfoLot({
             setOpen(false);
           }, 2000);
         } catch (error) {
+          console.log(error)
           setErrorMessage(error.message);
           setTimeout(() => {
             setErrorMessage("");
@@ -133,16 +142,7 @@ export default function InfoLot({
                                       : "text"
                                   }
                                   id={key}
-                                  defaultValue={
-                                    key === "valor_total_recibido"
-                                      ? value
-                                      : undefined
-                                  }
-                                  value={
-                                    key !== "valor_total_recibido"
-                                      ? value
-                                      : undefined
-                                  }
+                                  value={key === "valor_total_recibido" ? valorTotalRecibido : value}
                                   onChange={
                                     key === "valor_total_recibido"
                                       ? handleValorTotalRecibido
