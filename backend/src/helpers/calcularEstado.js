@@ -26,7 +26,7 @@ const calcularEstado = async (comision, excel) => {
     if (condicionEncontrada.length == 0){ return estado_comision = 'SIN CONDICION'}
     
     const comisionTotal = comision[valor_venta] * (condicionEncontrada[0].porcentaje_comision/100)
-    if(Number(comision[abono_comision]).toFixed(1) == Number(comisionTotal).toFixed(1)){
+    if(Number(comision[abono_comision]).toFixed(1) >= Number(comisionTotal).toFixed(1)){
         return estado_comision = "PAGADO"
     }
     if(comision[abono_comision] >= (comisionTotal/2)-0.02){ //Para decimales
