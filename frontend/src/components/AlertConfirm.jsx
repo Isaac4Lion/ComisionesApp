@@ -1,7 +1,9 @@
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 
 const AlertConfirm = ({file, setFile, openAlert, setOpenAlert, setOpen, setSuccessMessage, setErrorMessage, setOnAlert}) => {
+  const [loading, setLoading] = useState(false);
 
     const handleUpload = async () => {
         if (!file) {
@@ -12,6 +14,7 @@ const AlertConfirm = ({file, setFile, openAlert, setOpenAlert, setOpen, setSucce
         formData.append("f_subir", file);
     
         try {
+          setLoading(true)
           const token = localStorage.getItem('token')
           const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/importar-excel`, {
             method: "POST",
@@ -60,6 +63,8 @@ const AlertConfirm = ({file, setFile, openAlert, setOpenAlert, setOpen, setSucce
             setFile(null)
           },3000)
           console.error("Error:", error);
+        } finally {
+          setLoading(false)
         }
       };    
     return (
@@ -99,16 +104,18 @@ const AlertConfirm = ({file, setFile, openAlert, setOpenAlert, setOpen, setSucce
                 <button
                 type="button"
                 onClick={()=>handleUpload()}
-                className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto disabled:hover:cursor-not-allowed"
+                className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto disabled:hover:cursor-not-allowed disabled:bg-green-800 disabled:hover:bg-green-800"
+                disabled={loading}
                 >
-                Sí, subir a BDD
+                  {loading ? "Subiendo archivo..." : "Subir a BDD"}
                 </button>
             
                 <button
                 type="button"
                 data-autofocus
                 onClick={() => setOpenAlert(false)}
-                className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 sm:mt-0 sm:w-auto"
+                className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 sm:mt-0 sm:w-auto disabled:cursor-not-allowed disabled:bg-gray-400 disabled:hover:bg-gray-400"
+                disabled={loading}
                 >
                 Cancelar
                 </button>
