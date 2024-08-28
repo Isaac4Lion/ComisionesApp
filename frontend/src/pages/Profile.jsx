@@ -3,7 +3,7 @@ import AuthContext from "../context/AuthProvider";
 
 export default function Profile() {
   const { auth } = useContext(AuthContext);
-  const [updatePasswordOpen, setupdatePasswordOpen] = useState(false);
+  const [updatePasswordOpen, setUpdatePasswordOpen] = useState(false);
   const [form, setForm] = useState({
     actual_password: "",
     nueva_password: "",
@@ -11,22 +11,36 @@ export default function Profile() {
   });
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handlePasswordUpdate = async (e) => {
     e.preventDefault();
+
+    if (form.nueva_password !== form.confirmar_nueva_password) {
+      setError("Las nuevas contraseñas no coinciden");
+      return;
+    }
+
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
-      const url = `${import.meta.env.VITE_BACKEND_URL}${
-        auth.rol == "admin" ? "admin" : "usuario"
-      }/actualizar-password`;
       const requestedOptions = {
-        method:'PUT',
+        method: "PUT",
         headers: {
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
+        body: JSON.stringify(form),
       };
-      const response = await fetch(url, requestedOptions);
+
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}${
+          auth.rol === "admin" ? "admin" : "usuario"
+        }/actualizar-password`,
+        requestedOptions
+      );
       const data = await response.json();
+
       if (response.status === 200) {
         setSuccess(data.msg);
         setTimeout(() => setSuccess(""), 2000);
@@ -36,15 +50,22 @@ export default function Profile() {
           confirmar_nueva_password: "",
         });
       } else {
-        setError(data.msg);
+        setError(data.msg || "Ocurrió un error inesperado");
       }
     } catch (error) {
+      setError(
+        "Error al actualizar la contraseña, por favor inténtalo de nuevo."
+      );
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
+
   const handleValue = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
+
   return (
     <>
       {error && (
@@ -84,7 +105,7 @@ export default function Profile() {
           </svg>
           <span className="sr-only">Info</span>
           <div>
-            <span className="font-medium">Exito! </span>
+            <span className="font-medium">Éxito! </span>
             {success}
           </div>
         </div>
@@ -107,14 +128,14 @@ export default function Profile() {
           </span>
         </div>
         <button
-          onClick={() => setupdatePasswordOpen(!updatePasswordOpen)}
+          onClick={() => setUpdatePasswordOpen(!updatePasswordOpen)}
           className="bg-blue-800 hover:bg-blue-500 text-slate-100 py-4 px-8 rounded-xl font-bold"
         >
-          Actualizar Contraseña
+          {updatePasswordOpen ? "Ocultar" : "Actualizar Contraseña"}
         </button>
         <form
           onSubmit={handlePasswordUpdate}
-          className={`flex flex-col bg-gray-200 p-4 w-96 rounded ${
+          className={`flex flex-col bg-indigo-300 p-4 lg:w-96 w-80 rounded ${
             !updatePasswordOpen && "hidden"
           }`}
         >
@@ -126,6 +147,7 @@ export default function Profile() {
             type="password"
             name="actual_password"
             onChange={handleValue}
+            value={form.actual_password}
             placeholder="Ingresa tu contraseña actual"
           />
           <label className="font-bold" htmlFor="nueva_password">
@@ -136,9 +158,10 @@ export default function Profile() {
             type="password"
             name="nueva_password"
             onChange={handleValue}
+            value={form.nueva_password}
             placeholder="Ingresa tu nueva contraseña"
           />
-          <label className="font-bold" htmlFor="nueva_password">
+          <label className="font-bold" htmlFor="confirmar_nueva_password">
             Confirmar Nueva Contraseña
           </label>
           <input
@@ -146,13 +169,17 @@ export default function Profile() {
             type="password"
             name="confirmar_nueva_password"
             onChange={handleValue}
-            placeholder="Ingresa tu nueva contraseña para confirmar"
+            value={form.confirmar_nueva_password}
+            placeholder="Confirma tu nueva contraseña"
           />
           <button
             type="submit"
-            className="bg-blue-200 py-2 font-bold font-mono"
+            className={`bg-blue-200 py-2 font-bold font-mono rounded-b ${
+              loading && "opacity-50 cursor-not-allowed"
+            }`}
+            disabled={loading}
           >
-            ACTUALIZAR
+            {loading ? "ACTUALIZANDO..." : "ACTUALIZAR"}
           </button>
         </form>
       </div>

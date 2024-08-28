@@ -187,7 +187,7 @@ export default function InfoLot({
                   </div>
                 </div>
               </div>
-              <div className="flex justify-between w-full">
+              <div className="flex flex-col-reverse sm:flex-row justify-between w-full">
                 <div className="px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                   {type === "desistimiento" ? (
                     <button

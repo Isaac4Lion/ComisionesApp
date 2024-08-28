@@ -18,6 +18,7 @@ export default function RegisterLot({
 }) {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
     etapa: 1,
@@ -42,6 +43,7 @@ export default function RegisterLot({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     form.fecha_reserva = dateFormatter(form.fecha_reserva);
     try {
       const token = localStorage.getItem('token')
@@ -89,6 +91,8 @@ export default function RegisterLot({
       }
     } catch (error) {
       console.log(error);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -347,15 +351,16 @@ export default function RegisterLot({
               <button
                 form="lotRegisterForm"
                 type="submit"
-                className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto disabled:hover:cursor-not-allowed"
+                className="inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto disabled:hover:cursor-not-allowed disabled:bg-green-800"
               >
-                Registrar Lote
+                {loading ? "Registrando..." : "Registrar Lote"}
               </button>
               <button
                 type="button"
                 data-autofocus
                 onClick={() => setOpenModalRegister(false)}
-                className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 sm:mt-0 sm:w-auto"
+                className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-100 sm:mt-0 sm:w-auto disabled:cursor-not-allowed disabled:bg-gray-400"
+                disabled={loading}
               >
                 Cancelar
               </button>

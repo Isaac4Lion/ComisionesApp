@@ -8,6 +8,7 @@ const UsersTable = () => {
   const [admins, setAdmins] = useState([]);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
   const [openAlert, setOpenAlert] = useState(false)
   const [currentDelete, setCurrentDelete] = useState({id:'',type:''})
 
@@ -49,6 +50,7 @@ const UsersTable = () => {
   useEffect(() => {
     const listarUsuarios = async () => {
       try {
+        setLoading(true)
         const token = localStorage.getItem('token')
         const response = await fetch(
           `${import.meta.env.VITE_BACKEND_URL}/admin/usuarios`,{
@@ -63,6 +65,8 @@ const UsersTable = () => {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setLoading(false)
       }
     };
     listarUsuarios();
@@ -255,7 +259,7 @@ const UsersTable = () => {
                       className="text-xl text-slate-500 font-bold p-4"
                       colSpan={5}
                     >
-                      No existen usuarios registrados
+                      {loading ? "Cargando usuarios..." : "No existen usuarios registrados"}
                     </td>
                   </tr>
                 )}
@@ -269,7 +273,7 @@ const UsersTable = () => {
             <table className="min-w-full  text-sm font-light">
               <thead
                 className={`border-b border-neutral-200 font-medium bg-slate-100 sticky top-0`}
-              >
+                >
                 <tr>
                   <th className="px-6 py-2 sticky top-0">Nombre</th>
                   <th className="px-6 py-2 sticky top-0">Email</th>
@@ -281,8 +285,8 @@ const UsersTable = () => {
                 {admins.length > 0 ? (
                   admins.map((admin) => (
                     <tr
-                      className="border-b border-neutral-20 hover:bg-gray-300"
-                      key={admin._id}
+                    className="border-b border-neutral-20 hover:bg-gray-300"
+                    key={admin._id}
                     >
                       <td className="whitespace-nowrap px-6 py-4">
                         {admin.nombre_usuario}
@@ -304,11 +308,11 @@ const UsersTable = () => {
                             viewBox="0 0 48 48"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
-                          >
+                            >
                             <path
                               d="M14 42C12.9 42 11.9587 41.6087 11.176 40.826C10.3933 40.0433 10.0013 39.1013 10 38V12H8V8H18V6H30V8H40V12H38V38C38 39.1 37.6087 40.042 36.826 40.826C36.0433 41.61 35.1013 42.0013 34 42H14ZM34 12H14V38H34V12ZM18 34H22V16H18V34ZM26 34H30V16H26V34Z"
                               fill="#D22F27"
-                            />
+                              />
                           </svg>
                         </span>
                       </td>
@@ -319,8 +323,8 @@ const UsersTable = () => {
                     <td
                       className="text-xl text-slate-500 font-bold p-4"
                       colSpan={4}
-                    >
-                      No existen administradores registrados
+                      >
+                      {loading ? "Cargando administradores..." : "No existen administradores registrados"}
                     </td>
                   </tr>
                 )}

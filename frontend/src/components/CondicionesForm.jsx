@@ -15,6 +15,7 @@ export default function CondicionesForm({
   setActualId,
 }) {
   const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const [option, setOption] = useState("porcentaje");
   const [form, setForm] = useState({
     nombre: "",
@@ -40,6 +41,7 @@ export default function CondicionesForm({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     const formatedForm = {
       nombre: form.nombre,
       nro_pagos: Number(form.nro_pagos),
@@ -84,11 +86,14 @@ export default function CondicionesForm({
         setErrorMessage("");
       }, 3000);
       console.log(error);
+    } finally{
+      setLoading(false)
     }
   };
 
   const editarCondicion = async (id) => {
     try {
+      setLoading(true)
       const formatedForm = {
         nombre: form.nombre,
         nro_pagos: Number(form.nro_pagos),
@@ -124,6 +129,8 @@ export default function CondicionesForm({
       }
     } catch (error) {
       console.log(error);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -308,21 +315,23 @@ export default function CondicionesForm({
                   <button
                     type="submit"
                     form="condicionForm"
-                    className={`inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto disabled:hover:cursor-not-allowed ${
+                    className={`inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 sm:ml-3 sm:w-auto disabled:hover:cursor-not-allowed disabled:bg-green-700 disabled:hover:bg-green-700 ${
                       editMode && "hidden"
                     }`}
+                    disabled={loading || editMode}
                   >
-                    Registrar Condición
+                    {loading ? "Registrando..." : "Registrar Condición"}
                   </button>
                   <button
                     onClick={() => editarCondicion(actualId)}
-                    type="button"
+                    type="submit"
                     form="condicionForm"
-                    className={`inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto disabled:hover:cursor-not-allowed ${
+                    className={`inline-flex w-full justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 sm:ml-3 sm:w-auto disabled:hover:cursor-not-allowed disabled:bg-blue-800 disabled:hover:bg-blue-800 ${
                       !editMode && "hidden"
                     }`}
+                    disabled={loading || !editMode}
                   >
-                    Modificar Condición
+                    {loading ? "Modificando..." : "Modificar Condición"}
                   </button>
                   <button
                     type="button"

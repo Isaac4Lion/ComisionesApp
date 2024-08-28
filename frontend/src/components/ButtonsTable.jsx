@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const ButtonsTable = ({
   setError,
   setSuccess,
@@ -7,11 +9,14 @@ const ButtonsTable = ({
   setUpdateCommission,
   listarLotes,
 }) => {
+  const [loading, setLoading] = useState(false);
+
   const handleClick = () => {
     setOpenModalRegister(!openModalRegister);
   };
   const handleDownload = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem("token");
       const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/exportar-excel`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -46,6 +51,8 @@ const ButtonsTable = ({
     } catch (error) {
       console.log(error);
       alert("Algo salió mal");
+    } finally{
+      setLoading(false);
     }
   };
 
@@ -94,7 +101,8 @@ const ButtonsTable = ({
       </button>
       <button
         onClick={handleDownload}
-        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+        className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center disabled:bg-gray-700 disabled:hover:bg-gray-700 disabled:cursor-not-allowed"
+        disabled={loading}
       >
         <svg
           className="fill-current w-4 h-4 mr-2"
@@ -103,7 +111,7 @@ const ButtonsTable = ({
         >
           <path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" />
         </svg>
-        <span>DESCARGAR COPIA EN EXCEL</span>
+        <span>{loading ? "DESCARGANDO" : "DESCARGAR COPIA EN EXCEL"}</span>
       </button>
       <button
         onClick={deleteLastCommission}

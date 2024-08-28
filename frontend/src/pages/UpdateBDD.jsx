@@ -67,7 +67,7 @@ const UpdateBDD = () => {
       />
       <Link
         to="/admin"
-        className="inline-flex items-center border border-blue-900 px-3 py-1.5 m-8 rounded-md text-blue-900 hover:bg-blue-50"
+        className="inline-flex items-center border border-blue-900 px-3 py-1.5 mx-8 my-2 sm:m-8 rounded-md text-blue-900 hover:bg-blue-50"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -85,8 +85,8 @@ const UpdateBDD = () => {
         </svg>
         <span className="ml-1 font-bold text-lg">Regresar</span>
       </Link>
-      <div className="flex flex-col gap-12 mx-8 justify-between items-center lg:flex-row lg:items-center lg:mx-36">
-        <div className="w-full flex-1 mt-8 p-8 order-2 bg-white shadow-xl rounded-3xl sm:w-96 lg:rounded-r-none">
+      <div className="flex flex-col gap-2 lg:gap-0 mx-2 justify-between items-center lg:flex-row lg:items-center lg:mx-16">
+        <div className="w-full flex-1 mt-8 p-8 order-2 bg-white shadow-xl rounded-3xl sm:w-96 h-96 lg:rounded-r-none">
           <div className="mb-7 pb-7 flex items-center border-b border-gray-300">
             <svg
               width="34"
@@ -130,7 +130,7 @@ const UpdateBDD = () => {
             Actualizar Base de Datos
           </button>
         </div>
-        <div className="w-full flex-1 mt-8 p-8 order-3 bg-white shadow-xl rounded-3xl sm:w-96 lg:rounded-l-none">
+        <div className="w-full flex-1 mt-8 p-8 order-3 bg-white shadow-xl rounded-3xl sm:w-96 h-96 lg:rounded-l-none">
           <div className="mb-7 pb-7 flex items-center border-b border-gray-300">
             <svg
               width="36"
@@ -148,7 +148,6 @@ const UpdateBDD = () => {
               <span className="block text-2xl font-semibold">
                 Descargar Excel
               </span>
-              <span className="text-gray-500 font-medium">(Recomendado)</span>
             </div>
           </div>
           <ul className="mb-7 font-medium text-gray-500">
@@ -162,12 +161,6 @@ const UpdateBDD = () => {
               <span className="ml-3">
                 Realiza copias de seguridad{" "}
                 <span className="text-black">constantemente.</span>
-              </span>
-            </li>
-            <li className="flex text-lg mb-2">
-              <span className="ml-3">
-                Permite regresar a{" "}
-                <span className="text-black">estados anteriores.</span>
               </span>
             </li>
             <li className="flex text-lg">

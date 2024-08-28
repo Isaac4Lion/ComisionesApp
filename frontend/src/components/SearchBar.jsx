@@ -93,7 +93,7 @@ const SearchBar = ({ lotes, setLotes, type }) => {
     return (
     <>
         <div className="flex justify-center m-2">
-            <form className="flex flex-col md:flex-row gap-3" onSubmit={handleSubmit}>
+            <form className="flex flex-col-reverse md:flex-row gap-3" onSubmit={handleSubmit}>
                 <div className="flex flex-col md:flex-row">
                     {filter && 
                     <button type="button" onClick={() => cleanQuery()} className="font-bold text-slate-500 px-2 md:px-3 py-2 md:py-1">X</button>
